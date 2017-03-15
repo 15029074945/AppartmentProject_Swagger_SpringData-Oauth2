@@ -2,9 +2,13 @@ package com.spd.entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Table(name = "USER")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
@@ -39,6 +43,9 @@ public class User {
 
     @Column(name = "VERIFICATION_KEY")
     private String verificationKey;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserEmail> userEmails = new HashSet<>();
 
     public User() {
 
