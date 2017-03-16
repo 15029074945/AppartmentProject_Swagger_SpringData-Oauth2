@@ -1,12 +1,20 @@
 package com.spd.dto;
 
-/**
- * Created by Sasha on 15.03.2017.
- */
+import java.util.HashSet;
+
 public class UserDTO {
 
     private String firstName;
+
     private String lastName;
+
+    private String email;
+
+    private int imageId;
+
+    private boolean active;
+
+    //private Set<UserEmailDTO> userEmails = new HashSet<>();
 
     public String getFirstName() {
         return firstName;

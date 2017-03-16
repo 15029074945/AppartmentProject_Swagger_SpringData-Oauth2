@@ -47,6 +47,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<UserEmail> userEmails = new HashSet<>();
 
+    @OneToMany(mappedBy = "user")
+    private Set<UserTelephone> userTelephones = new HashSet<>();
+
     public User() {
 
     }
