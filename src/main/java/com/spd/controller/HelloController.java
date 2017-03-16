@@ -1,15 +1,9 @@
 package com.spd.controller;
 
-import com.spd.dto.UserDTO;
-import com.spd.entity.User;
-import com.spd.repository.UserRepository;
+import com.spd.dto.UserRegistrationDTO;
 import com.spd.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Iterator;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/")
@@ -23,8 +17,14 @@ public class HelloController {
         return userService.getById(1).getFirstName();
     }
 
+    @RequestMapping(value = "/users", method = RequestMethod.POST)
+    public String registration(@RequestBody UserRegistrationDTO userRegistrationDTO) {
+        System.out.println(userRegistrationDTO.firstName);
+        return "okey";
+    }
+
     @RequestMapping(value = "api/v1/greeting", method = RequestMethod.POST)
-    public UserDTO getUser() {
-        return new UserDTO();
+    public UserRegistrationDTO getUser() {
+        return new UserRegistrationDTO();
     }
 }
