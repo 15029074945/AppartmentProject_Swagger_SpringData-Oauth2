@@ -13,10 +13,14 @@ import java.util.Iterator;
 @RestController
 public class HelloController {
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping("/")
     public String index() {
-        UserService userService = new UserService();
         return userService.getById(1).getFirstName();
+        //userService.saveUser(new User());
+        //return "ok";
     }
 
     @RequestMapping("/greeting")

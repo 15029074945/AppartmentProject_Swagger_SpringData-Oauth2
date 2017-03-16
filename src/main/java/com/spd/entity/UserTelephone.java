@@ -14,9 +14,9 @@ public class UserTelephone {
     @Column(name = "TELEPHONE")
     private String telephone;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
-    private User user;
+    private User user = new User();
 
     public UserTelephone() {
 

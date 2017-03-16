@@ -2,6 +2,7 @@ package com.spd.dto;
 
 import java.util.HashSet;
 
+
 public class UserDTO {
 
     private String firstName;

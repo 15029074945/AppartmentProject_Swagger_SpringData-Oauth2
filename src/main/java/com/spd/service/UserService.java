@@ -8,10 +8,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    @Autowired(required = true)
+    @Autowired
     private UserRepository userRepository;
 
     public User getById(int id) {
-        return userRepository.findOne(id);
+        return userRepository.getOne(id);
+    }
+
+    public void saveUser(User user) {
+        userRepository.save(user);
     }
 }
