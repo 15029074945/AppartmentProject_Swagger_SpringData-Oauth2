@@ -1,5 +1,6 @@
 package com.spd.service;
 
+import com.spd.dto.UserRegistrationDTO;
 import com.spd.entity.User;
 import com.spd.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,11 @@ public class UserService {
         return userRepository.getOne(id);
     }
 
-    public void saveUser(User user) {
+    public void saveUser(UserRegistrationDTO userRegistrationDTO) {
+        User user = new User();
+        user.setFirstName(userRegistrationDTO.getFirstName());
+        user.setLastName(userRegistrationDTO.getLastName());
+        user.setEmail(userRegistrationDTO.getEmail());
         userRepository.save(user);
     }
 }
