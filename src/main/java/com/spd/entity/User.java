@@ -1,16 +1,14 @@
 package com.spd.entity;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "USER")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private int id;
 
@@ -44,11 +42,11 @@ public class User {
     @Column(name = "VERIFICATION_KEY")
     private String verificationKey;
 
-    @OneToMany(mappedBy = "user")
-    private Set<UserEmail> userEmails = new HashSet<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserEmail> userEmails = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private Set<UserTelephone> userTelephones = new HashSet<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserTelephone> userTelephones = new ArrayList<>();
 
     public User() {
 
@@ -140,5 +138,40 @@ public class User {
 
     public void setVerificationKey(String verificationKey) {
         this.verificationKey = verificationKey;
+    }
+
+    public List<UserEmail> getUserEmails() {
+        return userEmails;
+    }
+
+    public void setUserEmails(List<UserEmail> userEmails) {
+        this.userEmails = userEmails;
+    }
+
+    public List<UserTelephone> getUserTelephones() {
+        return userTelephones;
+    }
+
+    public void setUserTelephones(List<UserTelephone> userTelephones) {
+        this.userTelephones = userTelephones;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", imageId=" + imageId +
+                ", createdDate=" + createdDate +
+                ", updateDate=" + updateDate +
+                ", active=" + active +
+                ", status=" + status +
+                ", verificationKey='" + verificationKey + '\'' +
+                ", userEmails=" + userEmails +
+                ", userTelephones=" + userTelephones +
+                '}';
     }
 }
