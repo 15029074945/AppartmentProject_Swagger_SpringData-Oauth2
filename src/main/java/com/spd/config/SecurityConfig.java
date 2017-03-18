@@ -1,74 +1,74 @@
 package com.spd.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+/*import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;*/
 
-//@Configuration
-//@EnableWebSecurity
+import com.spd.security.CustomAuthenticationManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+import javax.sql.DataSource;
+
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
     @Autowired
-    private UserDetailsService userDetailsService;
+    private CustomAuthenticationManager customAuthenticationManager;
 
-    @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordencoder());
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/v2/api-docs",
+                "/configuration/ui",
+                "/swagger-resources",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**",
+                "/api/v1/users");
     }
 
+    /*@Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.httpBasic().disable();
+        http.authorizeRequests().anyRequest().authenticated();
+    }*/
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/").access("hasRole('USER')")
-                .anyRequest().permitAll()
+        http
+                .authorizeRequests()
+                    .antMatchers("/login").permitAll()
                 .and()
-                .formLogin().loginPage("/login")
-                .usernameParameter("username").passwordParameter("password")
-                .and()
-                .logout().logoutSuccessUrl("/login?logout")
-                .and()
-                .exceptionHandling().accessDeniedPage("/403")
-                .and()
-                .csrf();
+                .formLogin().permitAll().and()
+                    //.loginPage("/login").permitAll();
+                // default protection for all resources (including /oauth/authorize)
+                .authorizeRequests().anyRequest().authenticated();
     }
 
-    @Bean(name = "passwordEncoder")
-    public PasswordEncoder passwordencoder() {
-        return new BCryptPasswordEncoder();
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(customAuthenticationManager);
     }
 }
-
-
-
-
-   /* @Autowired
-    @Qualifier("userDetailsService")
-    UserDetailsService userDetailsService;*/
-
-  /*  @Autowired
-    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth
-                .inMemoryAuthentication()
-                .withUser("admin")
-                .password("root123")
-                .roles("USER");
-
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-
-        http.authorizeRequests()
-                .antMatchers("/", "/home").permitAll()
-                .antMatchers("/admin*//**").access("hasRole('USER')")
- .and().formLogin()
- .and().exceptionHandling().accessDeniedPage("/Access_Denied");
- }*/
