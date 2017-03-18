@@ -4,14 +4,10 @@ package com.spd.dto;
 public class UserRegistrationDTO {
 
     private String firstName;
-
     private String lastName;
-
     private String email;
-
     private String password;
-
-    private String termsChecked;
+    private boolean termsChecked;
 
     public String getFirstName() {
         return firstName;
@@ -45,11 +41,11 @@ public class UserRegistrationDTO {
         this.password = password;
     }
 
-    public String getTermsChecked() {
+    public boolean isTermsChecked() {
         return termsChecked;
     }
 
-    public void setTermsChecked(String termsChecked) {
+    public void setTermsChecked(boolean termsChecked) {
         this.termsChecked = termsChecked;
     }
 }
