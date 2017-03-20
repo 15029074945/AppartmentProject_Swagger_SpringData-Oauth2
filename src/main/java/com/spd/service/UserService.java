@@ -8,12 +8,16 @@ import com.spd.repository.UserRepository;
 import com.spd.repository.UserTelephoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -23,6 +27,20 @@ public class UserService {
 
     @Autowired
     private UserTelephoneRepository userTelephoneRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email).get(0);
+        return new org.springframework.security.core.userdetails.User(
+                email,
+                user.getPassword(),
+                true,
+                true,
+                true,
+                true,
+                new ArrayList<>()
+        );
+    }
 
     public User getById(int id) {
         return userRepository.getOne(id);
@@ -73,7 +91,7 @@ public class UserService {
 
     public User findByEmail(String email) {
 
-        List<User> users = (List<User>) userRepository.findByEmail(email);
+        List<User> users = userRepository.findByEmail(email);
 
         if(users.size() !=  1){
             return null;

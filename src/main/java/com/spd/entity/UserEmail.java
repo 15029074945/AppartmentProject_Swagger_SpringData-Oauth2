@@ -8,7 +8,6 @@ public class UserEmail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
     private int id;
 
     @Column(name = "EMAIL")
