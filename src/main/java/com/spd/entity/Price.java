@@ -1,6 +1,7 @@
 package com.spd.entity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "PRICE")
@@ -8,38 +9,34 @@ public class Price {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
-    private int id;
+    private Integer id;
 
     @Column(name = "PRICE")
-    private double price;
+    private BigDecimal price;
 
     @Column(name = "TYPE")
     private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ANNOUNCEMENT_ID")
-    private Announcement announcement = new Announcement();
+    private Announcement announcement;
 
     @Column(name = "ACTIVE")
-    private boolean active;
+    private Boolean active;
 
-    public Price() {
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -59,11 +56,12 @@ public class Price {
         this.announcement = announcement;
     }
 
-    public boolean isActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
+
 }

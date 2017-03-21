@@ -8,8 +8,7 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
-    private int id;
+    private Integer id;
 
     @Column(name = "COUNTRY")
     private String country;
@@ -32,14 +31,11 @@ public class Address {
     @Column(name = "LONGITUDE")
     private String longitude;
 
-    public Address() {
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -98,4 +94,5 @@ public class Address {
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
+
 }

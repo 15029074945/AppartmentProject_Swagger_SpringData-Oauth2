@@ -1,6 +1,7 @@
 package com.spd.config;
 
 import com.google.common.collect.Lists;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
@@ -19,6 +20,12 @@ import java.util.List;
 @EnableSwagger2
 public class SwaggerConfig {
 
+    @Value("security.oauth2.client.client-id")
+    private String clientId;
+
+    @Value("security.oauth2.client.client-secret")
+    private String clientSecret;
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -36,7 +43,7 @@ public class SwaggerConfig {
 
     @Bean
     SecurityConfiguration security() {
-        return new SecurityConfiguration("demo", "demo", "true", "demo",
+        return new SecurityConfiguration(clientId, clientSecret, "true", "demo",
                 "apiKey", ApiKeyVehicle.HEADER, "api_key", ",");
     }
 

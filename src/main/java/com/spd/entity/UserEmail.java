@@ -17,10 +17,6 @@ public class UserEmail {
     @JoinColumn(name = "USER_ID")
     private User user = new User();
 
-    public UserEmail() {
-
-    }
-
     public int getId() {
         return id;
     }

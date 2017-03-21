@@ -7,7 +7,7 @@ import ma.glasnost.orika.impl.ConfigurableMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BookingMapper extends ConfigurableMapper {
+public class ObjectMapper extends ConfigurableMapper {
 
     @Override
     protected void configure(MapperFactory mapperFactory) {

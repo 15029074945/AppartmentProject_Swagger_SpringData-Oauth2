@@ -15,11 +15,7 @@ public class UserTelephone {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
-    private User user = new User();
-
-    public UserTelephone() {
-
-    }
+    private User user;
 
     public int getId() {
         return id;

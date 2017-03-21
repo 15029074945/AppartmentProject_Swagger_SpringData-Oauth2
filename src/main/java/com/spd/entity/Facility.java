@@ -8,20 +8,16 @@ public class Facility {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
-    private int id;
+    private Integer id;
 
     @Column(name = "TITLE")
     private String title;
 
-    public Facility() {
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -32,4 +28,5 @@ public class Facility {
     public void setTitle(String title) {
         this.title = title;
     }
+
 }

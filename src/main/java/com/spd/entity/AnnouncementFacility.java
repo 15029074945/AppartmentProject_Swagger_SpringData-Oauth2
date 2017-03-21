@@ -8,22 +8,18 @@ public class AnnouncementFacility {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
     private int id;
 
     @Column(name = "ENABLED")
-    private boolean enabled;
+    private Boolean enabled;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ANNOUNCEMENT_ID")
-    private Announcement announcement = new Announcement();
+    private Announcement announcement;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FACILITY_ID")
-    private Facility facility = new Facility();
-
-    public AnnouncementFacility() {
-    }
+    private Facility facility;
 
     public int getId() {
         return id;
@@ -33,11 +29,11 @@ public class AnnouncementFacility {
         this.id = id;
     }
 
-    public boolean isEnabled() {
+    public Boolean getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -56,4 +52,5 @@ public class AnnouncementFacility {
     public void setFacility(Facility facility) {
         this.facility = facility;
     }
+
 }

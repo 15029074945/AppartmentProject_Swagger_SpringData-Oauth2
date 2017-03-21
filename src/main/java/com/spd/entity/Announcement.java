@@ -1,7 +1,8 @@
 package com.spd.entity;
 
 import javax.persistence.*;
-import java.util.*;
+import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "ANNOUNCEMENT")
@@ -9,17 +10,16 @@ public class Announcement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
-    private int id;
+    private Integer id;
 
     @Column(name = "HIDDEN")
-    private boolean hidden;
+    private Boolean hidden;
 
     @Column(name = "ROOM")
-    private int room;
+    private Integer room;
 
     @Column(name = "LIVING_PLACES")
-    private int livingPlaces;
+    private Integer livingPlaces;
 
     @Column(name = "TITLE")
     private String title;
@@ -34,54 +34,51 @@ public class Announcement {
     private Date updateDate;
 
     @Column(name = "ACTIVE")
-    private boolean active;
+    private Boolean active;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
-    private User user = new User();
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADDRESS_ID")
-    private Address address = new Address();
+    private Address address;
 
     @OneToMany(mappedBy = "announcement", fetch = FetchType.LAZY)
-    private List<AnnouncementFacility> facilities = new ArrayList<>();
+    private List<AnnouncementFacility> facilities;
 
     @OneToMany(mappedBy = "announcement", fetch = FetchType.LAZY)
-    private List<Price> prices = new ArrayList<>();
+    private List<Price> prices;
 
-    public Announcement() {
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public boolean isHidden() {
+    public Boolean getHidden() {
         return hidden;
     }
 
-    public void setHidden(boolean hidden) {
+    public void setHidden(Boolean hidden) {
         this.hidden = hidden;
     }
 
-    public int getRoom() {
+    public Integer getRoom() {
         return room;
     }
 
-    public void setRoom(int room) {
+    public void setRoom(Integer room) {
         this.room = room;
     }
 
-    public int getLivingPlaces() {
+    public Integer getLivingPlaces() {
         return livingPlaces;
     }
 
-    public void setLivingPlaces(int livingPlaces) {
+    public void setLivingPlaces(Integer livingPlaces) {
         this.livingPlaces = livingPlaces;
     }
 
@@ -117,11 +114,11 @@ public class Announcement {
         this.updateDate = updateDate;
     }
 
-    public boolean isActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
@@ -149,20 +146,12 @@ public class Announcement {
         this.facilities = facilities;
     }
 
-    @Override
-    public String toString() {
-        return "Announcement{" +
-                "id=" + id +
-                ", hidden=" + hidden +
-                ", room=" + room +
-                ", livingPlaces=" + livingPlaces +
-                ", title='" + title + '\'' +
-                ", shortDescription='" + shortDescription + '\'' +
-                ", createdDate=" + createdDate +
-                ", updateDate=" + updateDate +
-                ", active=" + active +
-                ", user=" + user +
-                ", address=" + address +
-                '}';
+    public List<Price> getPrices() {
+        return prices;
     }
+
+    public void setPrices(List<Price> prices) {
+        this.prices = prices;
+    }
+
 }

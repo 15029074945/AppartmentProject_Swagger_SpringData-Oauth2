@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -23,23 +24,23 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
-    private UserEmailRepository userEmailRepository;
-
-    @Autowired
     private UserTelephoneRepository userTelephoneRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email).get(0);
-        return new org.springframework.security.core.userdetails.User(
-                email,
+
+        Optional<User> userOptional = userRepository.findOneByEmail(email);
+
+        return userOptional.map(user ->
+                new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
                 user.getPassword(),
-                true,
+                user.getActive(),
                 true,
                 true,
                 true,
                 new ArrayList<>()
-        );
+        )).orElse(null);
     }
 
     public User getById(int id) {
@@ -63,19 +64,6 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
-    public void addExtraEmailByUser(int userId, String email) {
-        User user = userRepository.findOne(userId);
-        UserEmail userEmail = new UserEmail();
-        userEmail.setEmail(email);
-        userEmail.setUser(user);
-        userEmailRepository.save(userEmail);
-    }
-
-    public void deleteExtraEmailByUser(int userId, String email) {
-        UserEmail userEmail = userEmailRepository.findByUserIdAndEmail(userId, email);
-        userEmailRepository.delete(userEmail.getId());
-    }
-
     public void addExtraTelephoneByUser(int userId, String telephone) {
         User user = userRepository.findOne(userId);
         UserTelephone userTelephone = new UserTelephone();
@@ -85,17 +73,12 @@ public class UserService implements UserDetailsService {
     }
 
     public void deleteExtraTelephoneByUser(int userId, String telephone) {
-        UserTelephone userTelephone = userTelephoneRepository.findByUserIdAndTelephone(userId, telephone);
-        userTelephoneRepository.delete(userTelephone.getId());
+        Optional<UserTelephone> userTelephone = userTelephoneRepository.findByUserIdAndTelephone(userId, telephone);
+        userTelephoneRepository.delete(userTelephone.get());
     }
 
-    public User findByEmail(String email) {
-
-        List<User> users = userRepository.findByEmail(email);
-
-        if(users.size() !=  1){
-            return null;
-        }
-        return users.get(0);
-    }
+    /*public User findByEmail(String email) {
+        Optional<User> userOptional = userRepository.findOneByEmail(email);
+        return userOptional.orElse(null);
+    }*/
 }

@@ -9,7 +9,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
 
     @Column(name = "FIRST_NAME")
     private String firstName;
@@ -24,7 +24,7 @@ public class User {
     private String password;
 
     @Column(name = "IMAGE_ID")
-    private int imageId;
+    private Integer imageId;
 
     @Column(name = "CREATED_DATE")
     private Date createdDate;
@@ -33,29 +33,25 @@ public class User {
     private Date updateDate;
 
     @Column(name = "ACTIVE")
-    private boolean active;
+    private Boolean active;
 
     @Column(name = "STATUS")
-    private boolean status;
+    private Boolean status;
 
     @Column(name = "VERIFICATION_KEY")
     private String verificationKey;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<UserEmail> userEmails = new ArrayList<>();
+    private List<UserEmail> userEmails;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<UserTelephone> userTelephones = new ArrayList<>();
+    private List<UserTelephone> userTelephones;
 
-    public User() {
-
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -91,11 +87,11 @@ public class User {
         this.password = password;
     }
 
-    public int getImageId() {
+    public Integer getImageId() {
         return imageId;
     }
 
-    public void setImageId(int imageId) {
+    public void setImageId(Integer imageId) {
         this.imageId = imageId;
     }
 
@@ -115,19 +111,19 @@ public class User {
         this.updateDate = updateDate;
     }
 
-    public boolean isActive() {
+    public Boolean getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         this.active = active;
     }
 
-    public boolean isStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -153,24 +149,5 @@ public class User {
 
     public void setUserTelephones(List<UserTelephone> userTelephones) {
         this.userTelephones = userTelephones;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", imageId=" + imageId +
-                ", createdDate=" + createdDate +
-                ", updateDate=" + updateDate +
-                ", active=" + active +
-                ", status=" + status +
-                ", verificationKey='" + verificationKey + '\'' +
-                ", userEmails=" + userEmails +
-                ", userTelephones=" + userTelephones +
-                '}';
     }
 }
