@@ -1,9 +1,7 @@
 package com.spd.service;
 
 import com.spd.entity.User;
-import com.spd.entity.UserEmail;
 import com.spd.entity.UserTelephone;
-import com.spd.repository.UserEmailRepository;
 import com.spd.repository.UserRepository;
 import com.spd.repository.UserTelephoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +12,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private UserTelephoneRepository userTelephoneRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -63,22 +61,4 @@ public class UserService implements UserDetailsService {
         }
         return true;
     }
-
-    public void addExtraTelephoneByUser(int userId, String telephone) {
-        User user = userRepository.findOne(userId);
-        UserTelephone userTelephone = new UserTelephone();
-        userTelephone.setTelephone(telephone);
-        userTelephone.setUser(user);
-        userTelephoneRepository.save(userTelephone);
-    }
-
-    public void deleteExtraTelephoneByUser(int userId, String telephone) {
-        Optional<UserTelephone> userTelephone = userTelephoneRepository.findByUserIdAndTelephone(userId, telephone);
-        userTelephoneRepository.delete(userTelephone.get());
-    }
-
-    /*public User findByEmail(String email) {
-        Optional<User> userOptional = userRepository.findOneByEmail(email);
-        return userOptional.orElse(null);
-    }*/
 }

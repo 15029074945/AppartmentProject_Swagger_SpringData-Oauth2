@@ -16,8 +16,8 @@ public class UserEmailService {
 
     private final ObjectMapper objectMapper;
 
-    private final UserEmailRepository userEmailRepository;
     private final UserService userService;
+    private final UserEmailRepository userEmailRepository;
 
     @Autowired
     public UserEmailService(UserEmailRepository userEmailRepository, UserService userService, ObjectMapper objectMapper) {
