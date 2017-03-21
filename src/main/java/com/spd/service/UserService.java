@@ -1,9 +1,9 @@
 package com.spd.service;
 
+import com.spd.bean.UserRegistrationBean;
 import com.spd.entity.User;
-import com.spd.entity.UserTelephone;
+import com.spd.mapper.ObjectMapper;
 import com.spd.repository.UserRepository;
-import com.spd.repository.UserTelephoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,10 +17,12 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
+    private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(ObjectMapper objectMapper, UserRepository userRepository) {
+        this.objectMapper = objectMapper;
         this.userRepository = userRepository;
     }
 
@@ -60,5 +62,24 @@ public class UserService implements UserDetailsService {
             return false;
         }
         return true;
+    }
+
+    public Optional<User> getByEmail(String email) {
+        return userRepository.findOneByEmail(email);
+    }
+
+    public void saveUser(Optional<String> emailOptional, UserRegistrationBean userRegistrationBean) {
+        User newUser = emailOptional
+                .flatMap(userRepository::findOneByEmail)
+                .map(user -> updateUserWithUserRegistrationBean(user, userRegistrationBean))
+                .orElseGet(() -> objectMapper.map(userRegistrationBean, User.class));
+        saveUser(newUser);
+    }
+
+    private User updateUserWithUserRegistrationBean(User user, UserRegistrationBean userRegistrationBean) {
+        user.setFirstName(userRegistrationBean.getFirstName());
+        user.setLastName(userRegistrationBean.getLastName());
+        user.setPassword(userRegistrationBean.getPassword());
+        return user;
     }
 }

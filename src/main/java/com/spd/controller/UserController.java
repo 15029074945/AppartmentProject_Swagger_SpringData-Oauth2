@@ -2,15 +2,20 @@ package com.spd.controller;
 
 import com.spd.bean.UserInformationBean;
 import com.spd.bean.UserRegistrationBean;
-import com.spd.entity.User;
+import com.spd.exception.ValidationException;
 import com.spd.mapper.ObjectMapper;
 import com.spd.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.websocket.server.PathParam;
+import java.security.Principal;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -27,61 +32,26 @@ public class UserController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    @ApiOperation(value = "registration", httpMethod = "POST")
-    public void registration(@RequestBody UserRegistrationBean userRegistrationBean) {
-        if (userRegistrationBean.getTermsChecked()) {
+    @ApiOperation(value = "create update user", httpMethod = "POST")
+    public void createOrUpdateUser(Authentication authentication, @RequestBody UserRegistrationBean userRegistrationBean) {
 
-            User user = objectMapper.map(userRegistrationBean, User.class);
+        ValidationException
+                .assertTrue(userRegistrationBean.getTermsChecked(),
+                        "User shutdown exception handling");
 
-            userService.saveUser(user);
+        userService.saveUser(Optional.ofNullable(authentication).map(Principal::getName), userRegistrationBean);
 
-            // TODO
-            // send email verification
-        }
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    @ApiOperation(value = "delete user", httpMethod = "DELETE")
-    public void deleteUser(@PathVariable("id") int id) {
-
-        userService.deleteUser(id);
-
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    @ApiOperation(value = "get user", httpMethod = "GET")
-    public UserInformationBean getUser(@PathVariable("id") int id) {
-
-        User user = userService.getById(id);
-
-        return objectMapper.map(user, UserInformationBean.class);
-    }
-
-    //@RequestMapping(value = "/{id}/{property}/{value}", method = RequestMethod.PUT)
-    //@ApiOperation(value = "change property user", httpMethod = "PUT")
-    public void changeUser(@PathVariable("id") int id, @PathVariable("property") String property, @PathVariable("value") String value) {
-        User user = userService.getById(id);
         // TODO
-        // replace switch
-        switch (property) {
-            case "email":
-                user.setEmail(value);
-                break;
-            case "password":
-                user.setPassword(value);
-                break;
-            case "firstName":
-                user.setFirstName(value);
-                break;
-            case "lastName":
-                user.setLastName(value);
-                break;
-            // TODO
-            // add image
-            default:
-                return;
-        }
-        userService.updateUser(user);
+        // send email verification
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    @ApiOperation(value = "get user", httpMethod = "GET")
+    public UserInformationBean getUser(Authentication authentication) {
+        return userService
+                .getByEmail(authentication.getName())
+                .map(user -> objectMapper.map(user, UserInformationBean.class))
+                .orElse(new UserInformationBean());
     }
 
 }
