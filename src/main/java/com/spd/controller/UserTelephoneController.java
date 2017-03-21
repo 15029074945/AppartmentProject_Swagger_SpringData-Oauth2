@@ -1,6 +1,6 @@
 package com.spd.controller;
 
-import com.spd.dto.UserTelephoneDTO;
+import com.spd.bean.UserTelephoneBean;
 import com.spd.service.UserTelephoneService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,7 +39,7 @@ public class UserTelephoneController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "get list extra telephones", httpMethod = "GET")
-    public List<UserTelephoneDTO> getUserExtraEmails(@PathParam("id") int id) {
+    public List<UserTelephoneBean> getUserExtraEmails(@PathParam("id") int id) {
         return userTelephoneService.getListByUserId(id);
     }
 

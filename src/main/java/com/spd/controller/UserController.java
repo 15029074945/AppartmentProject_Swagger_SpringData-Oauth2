@@ -1,7 +1,7 @@
 package com.spd.controller;
 
-import com.spd.dto.UserInformationDTO;
-import com.spd.dto.UserRegistrationDTO;
+import com.spd.bean.UserInformationBean;
+import com.spd.bean.UserRegistrationBean;
 import com.spd.entity.User;
 import com.spd.mapper.ObjectMapper;
 import com.spd.service.UserService;
@@ -23,10 +23,10 @@ public class UserController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "registration", httpMethod = "POST")
-    public void registration(@RequestBody UserRegistrationDTO userRegistrationDTO) {
-        if (userRegistrationDTO.isTermsChecked()) {
+    public void registration(@RequestBody UserRegistrationBean userRegistrationBean) {
+        if (userRegistrationBean.getTermsChecked()) {
 
-            User user = objectMapper.map(userRegistrationDTO, User.class);
+            User user = objectMapper.map(userRegistrationBean, User.class);
 
             userService.saveUser(user);
 
@@ -45,12 +45,12 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "get user", httpMethod = "GET")
-    public UserInformationDTO getUser(@RequestParam int id) {
+    public UserInformationBean getUser(@RequestParam int id) {
 
         User user = userService.getById(id);
-        UserInformationDTO userInformationDTO = objectMapper.map(user, UserInformationDTO.class);
+        UserInformationBean userInformationBean = objectMapper.map(user, UserInformationBean.class);
 
-        return userInformationDTO;
+        return userInformationBean;
     }
 
     //@RequestMapping(value = "/{id}/{property}/{value}", method = RequestMethod.PUT)

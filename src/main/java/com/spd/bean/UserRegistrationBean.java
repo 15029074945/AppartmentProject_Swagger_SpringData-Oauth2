@@ -1,13 +1,13 @@
-package com.spd.dto;
+package com.spd.bean;
 
 
-public class UserRegistrationDTO {
+public class UserRegistrationBean {
 
     private String firstName;
     private String lastName;
     private String email;
     private String password;
-    private boolean termsChecked;
+    private Boolean termsChecked;
 
     public String getFirstName() {
         return firstName;
@@ -41,11 +41,12 @@ public class UserRegistrationDTO {
         this.password = password;
     }
 
-    public boolean isTermsChecked() {
+    public Boolean getTermsChecked() {
         return termsChecked;
     }
 
-    public void setTermsChecked(boolean termsChecked) {
+    public void setTermsChecked(Boolean termsChecked) {
         this.termsChecked = termsChecked;
     }
+
 }

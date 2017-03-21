@@ -1,6 +1,6 @@
 package com.spd.service;
 
-import com.spd.dto.UserEmailDTO;
+import com.spd.bean.UserEmailBean;
 import com.spd.entity.User;
 import com.spd.entity.UserEmail;
 import com.spd.mapper.ObjectMapper;
@@ -47,8 +47,8 @@ public class UserEmailService {
                 .ifPresent(userEmailRepository::delete);
     }
 
-    public List<UserEmailDTO> getListByUserId(int id) {
+    public List<UserEmailBean> getListByUserId(int id) {
         List<UserEmail> userEmails = userEmailRepository.findByUserId(id);
-        return objectMapper.mapAsList(userEmails, UserEmailDTO.class);
+        return objectMapper.mapAsList(userEmails, UserEmailBean.class);
     }
 }

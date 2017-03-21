@@ -1,6 +1,6 @@
 package com.spd.service;
 
-import com.spd.dto.UserTelephoneDTO;
+import com.spd.bean.UserTelephoneBean;
 import com.spd.entity.User;
 import com.spd.entity.UserTelephone;
 import com.spd.mapper.ObjectMapper;
@@ -47,8 +47,8 @@ public class UserTelephoneService {
                 .ifPresent(userTelephoneRepository::delete);
     }
 
-    public List<UserTelephoneDTO> getListByUserId(int id) {
+    public List<UserTelephoneBean> getListByUserId(int id) {
         List<UserTelephone> userTelephones = userTelephoneRepository.findByUserId(id);
-        return objectMapper.mapAsList(userTelephones, UserTelephoneDTO.class);
+        return objectMapper.mapAsList(userTelephones, UserTelephoneBean.class);
     }
 }
