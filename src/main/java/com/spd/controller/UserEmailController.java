@@ -1,6 +1,8 @@
 package com.spd.controller;
 
 import com.spd.bean.UserEmailBean;
+import com.spd.entity.UserEmail;
+import com.spd.mapper.ObjectMapper;
 import com.spd.service.UserEmailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,16 +21,20 @@ import java.util.List;
 public class UserEmailController {
 
     private final UserEmailService userEmailService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public UserEmailController(UserEmailService userEmailService) {
+    public UserEmailController(UserEmailService userEmailService, ObjectMapper objectMapper) {
         this.userEmailService = userEmailService;
+        this.objectMapper = objectMapper;
     }
 
     @RequestMapping(value = "/{email}", method = RequestMethod.POST)
     @ApiOperation(value = "add extra email", httpMethod = "POST")
-    public void addExtraEmail(@PathParam("id") int id, @PathParam("email") String email) {
+    public UserEmailBean addExtraEmail(@PathParam("id") int id, @PathParam("email") String email) {
         userEmailService.saveUserEmail(id, email);
+        UserEmail userEmail = userEmailService.getUserEmail(email);
+        return objectMapper.map(userEmail, UserEmailBean.class);
     }
 
     @RequestMapping(value = "/{idEmail}", method = RequestMethod.DELETE)
@@ -39,7 +45,7 @@ public class UserEmailController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "get list extra emails", httpMethod = "GET")
-    public List<UserEmailBean> getUserExtraEmails(@PathParam("id") int id) {
+    public List<UserEmailBean> getUserExtraEmails(@RequestParam int id) {
         return userEmailService.getListByUserId(id);
     }
 

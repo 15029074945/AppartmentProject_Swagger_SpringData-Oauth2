@@ -51,4 +51,12 @@ public class UserEmailService {
         List<UserEmail> userEmails = userEmailRepository.findByUserId(id);
         return objectMapper.mapAsList(userEmails, UserEmailBean.class);
     }
+
+    public UserEmail getUserEmail(String email) {
+        Optional<UserEmail> userEmailOptional = userEmailRepository.findOneByEmail(email);
+        if (userEmailOptional.isPresent()) {
+            return userEmailOptional.get();
+        }
+        throw new NullPointerException("Not found user with email");
+    }
 }
