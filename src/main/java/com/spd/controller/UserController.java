@@ -80,16 +80,4 @@ public class UserController {
         userService.updateUser(user);
     }
 
-    @RequestMapping(value = "/{id}/telephones/{telephone}", method = RequestMethod.POST)
-    @ApiOperation(value = "add extra telephone", httpMethod = "POST")
-    public void addExtraTelephone(@RequestParam int id, @RequestParam String telephone) {
-        userService.addExtraTelephoneByUser(id, telephone);
-    }
-
-    @RequestMapping(value = "/{id}/telephones/{telephone}", method = RequestMethod.DELETE)
-    @ApiOperation(value = "delete extra telephone", httpMethod = "DELETE")
-    public void deleteExtraTelephone(@RequestParam int id, @RequestParam String telephone) {
-        userService.deleteExtraTelephoneByUser(id, telephone);
-    }
-
 }
