@@ -27,13 +27,13 @@ public class UserEmailController {
 
     @RequestMapping(value = "/{email}", method = RequestMethod.POST)
     @ApiOperation(value = "add extra email", httpMethod = "POST")
-    public void addExtraEmail(@RequestParam int id, @RequestParam String email) {
+    public void addExtraEmail(@PathParam("id") int id, @PathParam("email") String email) {
         userEmailService.saveUserEmail(id, email);
     }
 
     @RequestMapping(value = "/{idEmail}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete extra email", httpMethod = "DELETE")
-    public void deleteExtraEmail(@RequestParam int idEmail) {
+    public void deleteExtraEmail(@PathParam("idEmail") int idEmail) {
         userEmailService.deleteUserEmail(idEmail);
     }
 

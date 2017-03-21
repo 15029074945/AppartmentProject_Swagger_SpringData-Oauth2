@@ -27,14 +27,14 @@ public class UserTelephoneController {
 
     @RequestMapping(value = "/{telephone}", method = RequestMethod.POST)
     @ApiOperation(value = "add extra telephone", httpMethod = "POST")
-    public void addExtraTelephone(@RequestParam int id, @RequestParam String telephone) {
+    public void addExtraTelephone(@PathParam("id") int id, @PathParam("telephone") String telephone) {
         userTelephoneService.saveUserTelephone(id, telephone);
     }
 
-    @RequestMapping(value = "/{telephone}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{idTelephone}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete extra telephone", httpMethod = "DELETE")
-    public void deleteExtraTelephone(@RequestParam int id) {
-        userTelephoneService.deleteUserTelephone(id);
+    public void deleteExtraTelephone(@PathParam("idTelephone") int idTelephone) {
+        userTelephoneService.deleteUserTelephone(idTelephone);
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
