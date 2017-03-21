@@ -42,7 +42,7 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete user", httpMethod = "DELETE")
-    public void deleteUser(@PathParam("id") int id) {
+    public void deleteUser(@PathVariable("id") int id) {
 
         userService.deleteUser(id);
 
