@@ -50,7 +50,7 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "get user", httpMethod = "GET")
-    public UserInformationBean getUser(@PathParam("id") int id) {
+    public UserInformationBean getUser(@PathVariable("id") int id) {
 
         User user = userService.getById(id);
 
@@ -59,7 +59,7 @@ public class UserController {
 
     //@RequestMapping(value = "/{id}/{property}/{value}", method = RequestMethod.PUT)
     //@ApiOperation(value = "change property user", httpMethod = "PUT")
-    public void changeUser(@PathParam("id") int id, @PathParam("property") String property, @PathParam("value") String value) {
+    public void changeUser(@PathVariable("id") int id, @PathVariable("property") String property, @PathVariable("value") String value) {
         User user = userService.getById(id);
         // TODO
         // replace switch

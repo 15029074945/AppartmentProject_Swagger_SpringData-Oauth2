@@ -7,12 +7,8 @@ import com.spd.service.UserEmailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -31,7 +27,7 @@ public class UserEmailController {
 
     @RequestMapping(value = "/{email}", method = RequestMethod.POST)
     @ApiOperation(value = "add extra email", httpMethod = "POST")
-    public UserEmailBean addExtraEmail(@PathParam("id") int id, @PathParam("email") String email) {
+    public UserEmailBean addExtraEmail(@PathVariable("id") int id, @PathVariable("email") String email) {
         userEmailService.saveUserEmail(id, email);
         UserEmail userEmail = userEmailService.getUserEmail(email);
         return objectMapper.map(userEmail, UserEmailBean.class);
@@ -39,7 +35,7 @@ public class UserEmailController {
 
     @RequestMapping(value = "/{idEmail}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete extra email", httpMethod = "DELETE")
-    public void deleteExtraEmail(@PathParam("idEmail") int idEmail) {
+    public void deleteExtraEmail(@PathVariable("idEmail") int idEmail) {
         userEmailService.deleteUserEmail(idEmail);
     }
 
