@@ -31,10 +31,10 @@ public class UserEmailController {
         userEmailService.saveUserEmail(id, email);
     }
 
-    @RequestMapping(value = "/{email}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{idEmail}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete extra email", httpMethod = "DELETE")
-    public void deleteExtraEmail(@RequestParam int id, @RequestParam String email) {
-        userEmailService.deleteUserEmail(id);
+    public void deleteExtraEmail(@RequestParam int idEmail) {
+        userEmailService.deleteUserEmail(idEmail);
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)

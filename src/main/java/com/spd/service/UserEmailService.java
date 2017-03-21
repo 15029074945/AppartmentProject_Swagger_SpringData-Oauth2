@@ -41,9 +41,9 @@ public class UserEmailService {
         userEmailRepository.save(userEmail);
     }
 
-    public void deleteUserEmail(int id) {
+    public void deleteUserEmail(int idEmail) {
         userEmailRepository
-                .findOneById(id)
+                .findOneById(idEmail)
                 .ifPresent(userEmailRepository::delete);
     }
 
