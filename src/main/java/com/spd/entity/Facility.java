@@ -1,6 +1,7 @@
 package com.spd.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "FACILITY")
@@ -13,20 +14,7 @@ public class Facility {
     @Column(name = "TITLE")
     private String title;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    @OneToMany(mappedBy = "facility")
+    private List<AnnouncementFacility> announcementFacilities;
 
 }

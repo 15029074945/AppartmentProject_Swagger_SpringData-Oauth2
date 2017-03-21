@@ -8,7 +8,7 @@ public class AnnouncementFacility {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
 
     @Column(name = "ENABLED")
     private Boolean enabled;
@@ -21,11 +21,11 @@ public class AnnouncementFacility {
     @JoinColumn(name = "FACILITY_ID")
     private Facility facility;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

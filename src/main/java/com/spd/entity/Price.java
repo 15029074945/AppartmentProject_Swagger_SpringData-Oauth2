@@ -17,12 +17,12 @@ public class Price {
     @Column(name = "TYPE")
     private String type;
 
+    @Column(name = "ACTIVE")
+    private Boolean active;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ANNOUNCEMENT_ID")
     private Announcement announcement;
-
-    @Column(name = "ACTIVE")
-    private Boolean active;
 
     public Integer getId() {
         return id;

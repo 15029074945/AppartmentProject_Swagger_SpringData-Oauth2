@@ -45,10 +45,25 @@ public class Announcement {
     private Address address;
 
     @OneToMany(mappedBy = "announcement", fetch = FetchType.LAZY)
-    private List<AnnouncementFacility> facilities;
+    private List<AnnouncementFacility> announcementFacilities;
 
     @OneToMany(mappedBy = "announcement", fetch = FetchType.LAZY)
     private List<Price> prices;
+
+    @OneToMany(mappedBy = "announcement", fetch = FetchType.LAZY)
+    private List<AnnouncementImage> announcementImages;
+
+    @OneToMany(mappedBy = "announcement", fetch = FetchType.LAZY)
+    private List<BookingRequest> bookingRequests;
+
+    @OneToMany(mappedBy = "announcement", fetch = FetchType.LAZY)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "announcement", fetch = FetchType.LAZY)
+    private List<Conversation> conversations;
+
+    @OneToMany(mappedBy = "announcement", fetch = FetchType.LAZY)
+    private List<Favorite> favorites;
 
     public Integer getId() {
         return id;
@@ -138,12 +153,12 @@ public class Announcement {
         this.address = address;
     }
 
-    public List<AnnouncementFacility> getFacilities() {
-        return facilities;
+    public List<AnnouncementFacility> getAnnouncementFacilities() {
+        return announcementFacilities;
     }
 
-    public void setFacilities(List<AnnouncementFacility> facilities) {
-        this.facilities = facilities;
+    public void setAnnouncementFacilities(List<AnnouncementFacility> announcementFacilities) {
+        this.announcementFacilities = announcementFacilities;
     }
 
     public List<Price> getPrices() {

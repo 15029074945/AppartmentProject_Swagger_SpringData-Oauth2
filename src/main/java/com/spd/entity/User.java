@@ -47,6 +47,21 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserTelephone> userTelephones;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Attender> attenders;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<BookingRequest> bookingRequests;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Favorite> favorites;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Message> messages;
+
     public Integer getId() {
         return id;
     }
