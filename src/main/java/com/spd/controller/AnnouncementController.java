@@ -1,15 +1,16 @@
 package com.spd.controller;
 
-import com.spd.bean.AnnouncementBean;
+import com.spd.bean.AnnouncementRequestBean;
+import com.spd.bean.AnnouncementResponseBean;
 import com.spd.entity.Announcement;
 import com.spd.mapper.ObjectMapper;
 import com.spd.service.AnnouncementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.Date;
 
 @RestController
 @RequestMapping("api/v1/announcements")
@@ -27,10 +28,10 @@ public class AnnouncementController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create announcement", httpMethod = "POST")
-    public ResponseEntity<Integer> createAnnouncement(@RequestBody AnnouncementBean announcementBean) {
-        Announcement announcement = objectMapper.map(announcementBean, Announcement.class);
-        int idAnnouncement = announcementService.saveAnnouncementReturnId(announcement);
-        return new ResponseEntity<>(idAnnouncement, HttpStatus.OK);
+    public AnnouncementResponseBean createAnnouncement(@RequestBody AnnouncementRequestBean announcementRequestBean) {
+        Announcement announcement = objectMapper.map(announcementRequestBean, Announcement.class);
+        announcement = announcementService.saveAnnouncement(announcement);
+        return objectMapper.map(announcement, AnnouncementResponseBean.class);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

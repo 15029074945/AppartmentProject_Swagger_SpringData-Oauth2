@@ -15,9 +15,8 @@ public class AnnouncementService {
         this.announcementRepository = announcementRepository;
     }
 
-    public Integer saveAnnouncementReturnId(Announcement announcement) {
-        Announcement newAnnouncement = announcementRepository.save(announcement);
-        return newAnnouncement.getId();
+    public Announcement saveAnnouncement(Announcement announcement) {
+        return announcementRepository.save(announcement);
     }
 
     public void deleteAnnouncement(int idAnnouncement) {
