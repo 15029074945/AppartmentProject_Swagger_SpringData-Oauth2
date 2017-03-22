@@ -29,8 +29,8 @@ public class User {
     @Column(name = "CREATED_DATE")
     private Date createdDate;
 
-    @Column(name = "UPDATE_DATE")
-    private Date updateDate;
+    @Column(name = "UPDATED_DATE")
+    private Date updatedDate;
 
     @Column(name = "ACTIVE")
     private Boolean active;
@@ -118,12 +118,12 @@ public class User {
         this.createdDate = createdDate;
     }
 
-    public Date getUpdateDate() {
-        return updateDate;
+    public Date getUpdatedDate() {
+        return updatedDate;
     }
 
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     public Boolean getActive() {

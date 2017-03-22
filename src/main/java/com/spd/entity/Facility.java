@@ -17,4 +17,27 @@ public class Facility {
     @OneToMany(mappedBy = "facility")
     private List<AnnouncementFacility> announcementFacilities;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<AnnouncementFacility> getAnnouncementFacilities() {
+        return announcementFacilities;
+    }
+
+    public void setAnnouncementFacilities(List<AnnouncementFacility> announcementFacilities) {
+        this.announcementFacilities = announcementFacilities;
+    }
 }
