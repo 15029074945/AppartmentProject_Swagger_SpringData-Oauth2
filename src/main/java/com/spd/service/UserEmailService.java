@@ -26,10 +26,14 @@ public class UserEmailService {
         this.objectMapper = objectMapper;
     }
 
-    public void saveUserEmail(int userId, String email) {
-        Optional<UserEmail> userEmailOptional = userEmailRepository.findByUserIdAndEmail(userId, email);
-        if (!userEmailOptional.isPresent()) {
-            createUserEmail(userId, email);
+    public void saveUserEmail(String emailUser, String extraEmail) {
+        Optional<User> userOptional = userService.getByEmail(emailUser);
+        if (userOptional.isPresent()) {
+            int userId = userOptional.get().getId();
+            Optional<UserEmail> userEmailOptional = userEmailRepository.findByUserIdAndEmail(userId, extraEmail);
+            if (!userEmailOptional.isPresent()) {
+                createUserEmail(userId, extraEmail);
+            }
         }
     }
 
@@ -47,8 +51,9 @@ public class UserEmailService {
                 .ifPresent(userEmailRepository::delete);
     }
 
-    public List<UserEmailBean> getListByUserId(int id) {
-        List<UserEmail> userEmails = userEmailRepository.findByUserId(id);
+    public List<UserEmailBean> getListByUserEmail(String email) {
+        Optional<User> userOptional = userService.getByEmail(email);
+        List<UserEmail> userEmails = userEmailRepository.findByUserId(userOptional.get().getId());
         return objectMapper.mapAsList(userEmails, UserEmailBean.class);
     }
 

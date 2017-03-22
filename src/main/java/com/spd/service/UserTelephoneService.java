@@ -26,7 +26,8 @@ public class UserTelephoneService {
         this.userTelephoneRepository = userTelephoneRepository;
     }
 
-    public void saveUserTelephone(int userId, String telephone) {
+    public void saveUserTelephone(String userEmail, String telephone) {
+        int userId = userService.getByEmail(userEmail).get().getId();
         Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findByUserIdAndTelephone(userId, telephone);
         if (!userEmailOptional.isPresent()) {
             createUserTelephone(userId, telephone);
@@ -47,7 +48,8 @@ public class UserTelephoneService {
                 .ifPresent(userTelephoneRepository::delete);
     }
 
-    public List<UserTelephoneBean> getListByUserId(int id) {
+    public List<UserTelephoneBean> getListByEmail(String userEmail) {
+        int id = userService.getByEmail(userEmail).get().getId();
         List<UserTelephone> userTelephones = userTelephoneRepository.findByUserId(id);
         return objectMapper.mapAsList(userTelephones, UserTelephoneBean.class);
     }

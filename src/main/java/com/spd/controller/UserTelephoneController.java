@@ -5,6 +5,7 @@ import com.spd.service.UserTelephoneService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/users/{id}/telephones")
+@RequestMapping("api/v1/users/telephones")
 @Api(value = "users")
 public class UserTelephoneController {
 
@@ -26,8 +27,8 @@ public class UserTelephoneController {
 
     @RequestMapping(value = "/{telephone}", method = RequestMethod.POST)
     @ApiOperation(value = "add extra telephone", httpMethod = "POST")
-    public void addExtraTelephone(@PathVariable("id") int id, @PathVariable("telephone") String telephone) {
-        userTelephoneService.saveUserTelephone(id, telephone);
+    public void addExtraTelephone(Authentication authentication, @PathVariable("telephone") String telephone) {
+        userTelephoneService.saveUserTelephone(authentication.getName(), telephone);
     }
 
     @RequestMapping(value = "/{idTelephone}", method = RequestMethod.DELETE)
@@ -38,8 +39,8 @@ public class UserTelephoneController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "get list extra telephones", httpMethod = "GET")
-    public List<UserTelephoneBean> getUserExtraEmails(@PathVariable("id") int id) {
-        return userTelephoneService.getListByUserId(id);
+    public List<UserTelephoneBean> getUserExtraEmails(Authentication authentication) {
+        return userTelephoneService.getListByEmail(authentication.getName());
     }
 
 }

@@ -7,12 +7,13 @@ import com.spd.service.UserEmailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/users/{id}/emails")
+@RequestMapping("api/v1/users/emails")
 @Api(value = "users")
 public class UserEmailController {
 
@@ -27,9 +28,9 @@ public class UserEmailController {
 
     @RequestMapping(value = "/{email}", method = RequestMethod.POST)
     @ApiOperation(value = "add extra email", httpMethod = "POST")
-    public UserEmailBean addExtraEmail(@PathVariable("id") int id, @PathVariable("email") String email) {
-        userEmailService.saveUserEmail(id, email);
-        UserEmail userEmail = userEmailService.getUserEmail(email);
+    public UserEmailBean addExtraEmail(Authentication authentication, @PathVariable("email") String extraEmail) {
+        userEmailService.saveUserEmail(authentication.getName(), extraEmail);
+        UserEmail userEmail = userEmailService.getUserEmail(extraEmail);
         return objectMapper.map(userEmail, UserEmailBean.class);
     }
 
@@ -41,8 +42,8 @@ public class UserEmailController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "get list extra emails", httpMethod = "GET")
-    public List<UserEmailBean> getUserExtraEmails(@RequestParam int id) {
-        return userEmailService.getListByUserId(id);
+    public List<UserEmailBean> getUserExtraEmails(Authentication authentication) {
+        return userEmailService.getListByUserEmail(authentication.getName());
     }
 
 }
