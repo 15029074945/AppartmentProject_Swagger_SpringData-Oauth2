@@ -39,7 +39,10 @@ public class UserController {
                 .assertTrue(userRegistrationBean.getTermsChecked(),
                         "User shutdown exception handling");
 
-        userService.saveUser(Optional.ofNullable(authentication).map(Principal::getName), userRegistrationBean);
+        userService
+                .saveUser(Optional
+                        .ofNullable(authentication)
+                        .map(Principal::getName), userRegistrationBean);
 
         // TODO
         // send email verification

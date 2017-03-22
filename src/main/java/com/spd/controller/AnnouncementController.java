@@ -8,9 +8,12 @@ import com.spd.service.AnnouncementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.sql.Date;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/announcements")
@@ -28,9 +31,15 @@ public class AnnouncementController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create announcement", httpMethod = "POST")
-    public AnnouncementResponseBean createAnnouncement(@RequestBody AnnouncementRequestBean announcementRequestBean) {
+    public AnnouncementResponseBean createOrUpdateAnnouncement(Authentication authentication, @RequestBody AnnouncementRequestBean announcementRequestBean) {
         Announcement announcement = objectMapper.map(announcementRequestBean, Announcement.class);
-        announcement = announcementService.saveAnnouncement(announcement);
+
+        //announcement = announcementService.saveAnnouncement(announcement);
+        announcementService
+                .saveAnnouncement(Optional
+                        .ofNullable(authentication)
+                        .map(Principal::getName), announcementRequestBean);
+
         return objectMapper.map(announcement, AnnouncementResponseBean.class);
     }
 
