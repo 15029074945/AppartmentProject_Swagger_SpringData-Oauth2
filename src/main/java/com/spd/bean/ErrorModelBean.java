@@ -5,6 +5,11 @@ public class ErrorModelBean {
     private String message;
     private Integer code;
 
+    public ErrorModelBean(String message, Integer code) {
+        this.message = message;
+        this.code = code;
+    }
+
     public String getMassege() {
         return message;
     }
@@ -18,11 +23,6 @@ public class ErrorModelBean {
     }
 
     public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public ErrorModelBean(String message, Integer code) {
-        this.message = message;
         this.code = code;
     }
 }

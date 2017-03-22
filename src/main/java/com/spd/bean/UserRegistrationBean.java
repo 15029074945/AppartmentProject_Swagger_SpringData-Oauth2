@@ -48,5 +48,4 @@ public class UserRegistrationBean {
     public void setTermsChecked(Boolean termsChecked) {
         this.termsChecked = termsChecked;
     }
-
 }
