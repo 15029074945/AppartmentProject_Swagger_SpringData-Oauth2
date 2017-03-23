@@ -13,7 +13,9 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
         http.anonymous().and()
                 .authorizeRequests()
                 .antMatchers("/**/*.js",
-                        "/login", "/**/*.js",
+                        "/login",
+                        "/**/*.js",
+                        "/api/v1/users",
                         "/swagger*",
                         "/swagger-resources/**",
                         "/api-docs",
@@ -22,8 +24,6 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                         "/webjars/**",
                         "/images/*.*")
                             .permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/users")
-                    .permitAll()
                 .anyRequest().authenticated();
     }
 
