@@ -23,8 +23,8 @@ public class User {
     @Column(name = "PASSWORD")
     private String password;
 
-    @Column(name = "IMAGE_ID")
-    private Integer imageId;
+    /*@Column(name = "IMAGE_ID")
+    private Integer imageId;*/
 
     @Column(name = "CREATED_DATE")
     private Date createdDate;
@@ -40,6 +40,10 @@ public class User {
 
     @Column(name = "VERIFICATION_KEY")
     private String verificationKey;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IMAGE_ID")
+    private Image image;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<UserEmail> userEmails;
@@ -102,13 +106,13 @@ public class User {
         this.password = password;
     }
 
-    public Integer getImageId() {
+  /*  public Integer getImageId() {
         return imageId;
     }
 
     public void setImageId(Integer imageId) {
         this.imageId = imageId;
-    }
+    }*/
 
     public Date getCreatedDate() {
         return createdDate;
@@ -164,5 +168,13 @@ public class User {
 
     public void setUserTelephones(List<UserTelephone> userTelephones) {
         this.userTelephones = userTelephones;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 }
