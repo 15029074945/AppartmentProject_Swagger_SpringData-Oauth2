@@ -1,0 +1,13 @@
+image: node:argon
+
+before_script:
+    - apt-get -qq update
+    - apt-get install -yqq ruby ruby-dev
+
+production:
+    type: deploy
+    script:
+    - gem install dpl
+    - dpl --provider=heroku --app=rent-appartment-app --api-key=bbc8b13c-1165-49f2-9890-0c8c213eb1cb
+    only:
+    - master
