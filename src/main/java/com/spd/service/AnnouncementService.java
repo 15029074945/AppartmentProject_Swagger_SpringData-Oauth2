@@ -32,4 +32,12 @@ public class AnnouncementService {
         announcement.setUser(userOptional.get());
         return announcementRepository.save(announcement);
     }
+
+    public Optional<Announcement> getById(Integer id) {
+        return announcementRepository.findOneByUserId(id);
+    }
+
+    public void saveAnnouncement(Announcement announcement) {
+        announcementRepository.save(announcement);
+    }
 }
