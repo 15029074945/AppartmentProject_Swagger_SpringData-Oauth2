@@ -1,15 +1,25 @@
 package com.spd.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 @Configuration
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.anonymous().and()
+        http
+                .formLogin().permitAll()
+                .and()
+                .sessionManagement().sessionCreationPolicy(STATELESS)
+                .and()
                 .authorizeRequests()
                 .antMatchers("/**/*.js",
                         "/login",
@@ -23,6 +33,9 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                         "/webjars/**",
                         "/images/*.*")
                             .permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**")
+                    .permitAll()
                 .anyRequest().authenticated();
     }
+
 }
