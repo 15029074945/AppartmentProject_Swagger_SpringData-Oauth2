@@ -34,7 +34,7 @@ public class UserController {
         this.objectMapper = objectMapper;
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "*") // http://localhost:3000
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create update user", httpMethod = "POST")
     public void createOrUpdateUser(Authentication authentication, @RequestBody UserRegistrationBean userRegistrationBean) {

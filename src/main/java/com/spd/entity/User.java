@@ -33,7 +33,7 @@ public class User {
     private Date updatedDate;
 
     @Column(name = "ACTIVE")
-    private Boolean active;
+    private Boolean active = true;
 
     @Column(name = "STATUS")
     private Boolean status;
