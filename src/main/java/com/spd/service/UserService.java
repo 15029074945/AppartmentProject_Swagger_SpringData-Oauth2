@@ -80,6 +80,7 @@ public class UserService implements UserDetailsService {
         user.setFirstName(userRegistrationBean.getFirstName());
         user.setLastName(userRegistrationBean.getLastName());
         user.setPassword(userRegistrationBean.getPassword());
+        user.setActive(true);
         return user;
     }
 }
