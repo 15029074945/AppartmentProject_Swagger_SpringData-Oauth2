@@ -50,7 +50,7 @@ public class SwaggerConfig {
         List<AuthorizationScope> authorizationScopeList = Lists.newArrayList();
         authorizationScopeList.add(new AuthorizationScope(AUTHORIZATION_SCOPE_GLOBAL, AUTHORIZATION_SCOPE_GLOBAL_DESC));
         List<GrantType> grantTypes = Lists.newArrayList();
-        ResourceOwnerPasswordCredentialsGrant passwordGrant = new ResourceOwnerPasswordCredentialsGrant("http://localhost:8080/oauth/token");
+        ResourceOwnerPasswordCredentialsGrant passwordGrant = new ResourceOwnerPasswordCredentialsGrant("/oauth/token");
         grantTypes.add(passwordGrant);
         OAuth oAuth = new OAuth(SECURITY_SCHEMA_OAUTH2, authorizationScopeList, grantTypes);
         return oAuth;
