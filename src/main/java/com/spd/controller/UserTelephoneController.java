@@ -1,6 +1,8 @@
 package com.spd.controller;
 
 import com.spd.bean.UserTelephoneBean;
+import com.spd.entity.UserTelephone;
+import com.spd.mapper.ObjectMapper;
 import com.spd.service.UserTelephoneService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,16 +21,19 @@ import java.util.List;
 public class UserTelephoneController {
 
     private final UserTelephoneService userTelephoneService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public UserTelephoneController(UserTelephoneService userTelephoneService) {
+    public UserTelephoneController(UserTelephoneService userTelephoneService, ObjectMapper objectMapper) {
         this.userTelephoneService = userTelephoneService;
+        this.objectMapper = objectMapper;
     }
 
     @RequestMapping(value = "/{telephone}", method = RequestMethod.POST)
     @ApiOperation(value = "add extra telephone", httpMethod = "POST")
-    public void addExtraTelephone(Authentication authentication, @PathVariable("telephone") String telephone) {
-        userTelephoneService.saveUserTelephone(authentication.getName(), telephone);
+    public UserTelephoneBean addExtraTelephone(Authentication authentication, @PathVariable("telephone") String extraTelephone) {
+        UserTelephone userTelephone = userTelephoneService.saveUserTelephone(authentication.getName(), extraTelephone);
+        return objectMapper.map(userTelephone, UserTelephoneBean.class);
     }
 
     @RequestMapping(value = "/{idTelephone}", method = RequestMethod.DELETE)

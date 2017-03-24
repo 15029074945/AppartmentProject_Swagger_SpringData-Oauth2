@@ -8,12 +8,18 @@ import com.spd.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.security.Principal;
 import java.util.Optional;
 
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @RestController
 @RequestMapping("api/v1/users")
 @Api(value = "users")

@@ -26,23 +26,24 @@ public class UserEmailService {
         this.objectMapper = objectMapper;
     }
 
-    public void saveUserEmail(String emailUser, String extraEmail) {
-        Optional<User> userOptional = userService.getByEmail(emailUser);
+    public UserEmail saveUserEmail(String userEmail, String extraEmail) {
+        Optional<User> userOptional = userService.getByEmail(userEmail);
         if (userOptional.isPresent()) {
             int userId = userOptional.get().getId();
             Optional<UserEmail> userEmailOptional = userEmailRepository.findByUserIdAndEmail(userId, extraEmail);
             if (!userEmailOptional.isPresent()) {
-                createUserEmail(userId, extraEmail);
+                return createUserEmail(userId, extraEmail);
             }
         }
+        return new UserEmail();
     }
 
-    private void createUserEmail(int userId, String email) {
+    private UserEmail createUserEmail(int userId, String email) {
         User user = userService.getById(userId);
         UserEmail userEmail = new UserEmail();
         userEmail.setEmail(email);
         userEmail.setUser(user);
-        userEmailRepository.save(userEmail);
+        return userEmailRepository.save(userEmail);
     }
 
     public void deleteUserEmail(int idEmail) {

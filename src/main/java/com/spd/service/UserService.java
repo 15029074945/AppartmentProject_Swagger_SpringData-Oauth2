@@ -40,7 +40,7 @@ public class UserService implements UserDetailsService {
                 true,
                 true,
                 new ArrayList<>()
-        )).orElse(null);
+        )).orElseThrow(() -> new UsernameNotFoundException("Not user TODO"));
     }
 
     public User getById(int id) {

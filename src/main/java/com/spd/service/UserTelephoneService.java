@@ -26,20 +26,24 @@ public class UserTelephoneService {
         this.userTelephoneRepository = userTelephoneRepository;
     }
 
-    public void saveUserTelephone(String userEmail, String telephone) {
-        int userId = userService.getByEmail(userEmail).get().getId();
-        Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findByUserIdAndTelephone(userId, telephone);
-        if (!userEmailOptional.isPresent()) {
-            createUserTelephone(userId, telephone);
+    public UserTelephone saveUserTelephone(String userEmail, String extraTelephone) {
+        Optional<User> userOptional = userService.getByEmail(userEmail);
+        if (userOptional.isPresent()) {
+            int userId = userOptional.get().getId();
+            Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findByUserIdAndTelephone(userId, extraTelephone);
+            if (!userEmailOptional.isPresent()) {
+                return createUserTelephone(userId, extraTelephone);
+            }
         }
+        return new UserTelephone();
     }
 
-    private void createUserTelephone(int userId, String email) {
+    private UserTelephone createUserTelephone(int userId, String email) {
         User user = userService.getById(userId);
         UserTelephone userTelephone= new UserTelephone();
         userTelephone.setTelephone(email);
         userTelephone.setUser(user);
-        userTelephoneRepository.save(userTelephone);
+        return userTelephoneRepository.save(userTelephone);
     }
 
     public void deleteUserTelephone(int id) {
@@ -53,4 +57,12 @@ public class UserTelephoneService {
         List<UserTelephone> userTelephones = userTelephoneRepository.findByUserId(id);
         return objectMapper.mapAsList(userTelephones, UserTelephoneBean.class);
     }
+
+    /*public UserTelephone getUserTelephone(String extraTelephone) {
+        Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findOneByEmail(email);
+        if (userEmailOptional.isPresent()) {
+            return userEmailOptional.get();
+        }
+        throw new NullPointerException("Not found user with email");
+    }*/
 }

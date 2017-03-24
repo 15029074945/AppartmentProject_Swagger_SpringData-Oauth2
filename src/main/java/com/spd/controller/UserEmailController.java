@@ -29,8 +29,7 @@ public class UserEmailController {
     @RequestMapping(value = "/{email}", method = RequestMethod.POST)
     @ApiOperation(value = "add extra email", httpMethod = "POST")
     public UserEmailBean addExtraEmail(Authentication authentication, @PathVariable("email") String extraEmail) {
-        userEmailService.saveUserEmail(authentication.getName(), extraEmail);
-        UserEmail userEmail = userEmailService.getUserEmail(extraEmail);
+        UserEmail userEmail = userEmailService.saveUserEmail(authentication.getName(), extraEmail);
         return objectMapper.map(userEmail, UserEmailBean.class);
     }
 
