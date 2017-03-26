@@ -8,6 +8,7 @@ import com.spd.repository.UserEmailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,16 +47,28 @@ public class UserEmailService {
         return userEmailRepository.save(userEmail);
     }
 
-    public void deleteUserEmail(int idEmail) {
-        userEmailRepository
-                .findOneById(idEmail)
-                .ifPresent(userEmailRepository::delete);
+    public void deleteUserEmail(String email, int id) {
+        Optional<UserEmail> userEmailOptional = userEmailRepository
+                .findOneById(id);
+        userEmailOptional.ifPresent(userEmail -> {
+            if (userEmail.getUser().getEmail().equals(email)) {
+                userEmailRepository.delete(id);
+            }
+            else {
+                // TODO
+            }
+        });
     }
 
     public List<UserEmailBean> getListByUserEmail(String email) {
         Optional<User> userOptional = userService.getByEmail(email);
-        List<UserEmail> userEmails = userEmailRepository.findByUserId(userOptional.get().getId());
-        return objectMapper.mapAsList(userEmails, UserEmailBean.class);
+        if (userOptional.isPresent()) {
+            List<UserEmail> userEmails = userEmailRepository.findByUserId(userOptional.get().getId());
+            return objectMapper.mapAsList(userEmails, UserEmailBean.class);
+        }
+        else {
+            return new ArrayList<>();
+        }
     }
 
     public UserEmail getUserEmail(String email) {
