@@ -14,9 +14,6 @@ public class Price {
     @Column(name = "PRICE")
     private BigDecimal price;
 
-    @Column(name = "TYPE")
-    private String type;
-
     @Column(name = "ACTIVE")
     private Boolean active;
 
@@ -44,14 +41,6 @@ public class Price {
         this.price = price;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public Announcement getAnnouncement() {
         return announcement;
     }
@@ -68,4 +57,11 @@ public class Price {
         this.active = active;
     }
 
+    public PriceType getPriceType() {
+        return priceType;
+    }
+
+    public void setPriceType(PriceType priceType) {
+        this.priceType = priceType;
+    }
 }
