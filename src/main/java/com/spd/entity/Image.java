@@ -11,6 +11,9 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @Column(name="MIME")
+    private String mimeType;
+
     @Lob
     @Column(name = "DATA")
     private byte[] data;
@@ -24,6 +27,14 @@ public class Image {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 
     public byte[] getData() {
@@ -42,4 +53,5 @@ public class Image {
                 ", data=" + Arrays.toString(data) +
                 '}';
     }
+
 }

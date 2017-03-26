@@ -2,6 +2,7 @@ package com.spd.service;
 
 import com.spd.bean.UserInformationBean;
 import com.spd.bean.UserRegistrationBean;
+import com.spd.entity.Image;
 import com.spd.entity.User;
 import com.spd.mapper.ObjectMapper;
 import com.spd.repository.UserRepository;
@@ -19,11 +20,13 @@ public class UserService implements UserDetailsService {
 
     private final ObjectMapper objectMapper;
     private final UserRepository userRepository;
+    private final ImageService imageService;
 
     @Autowired
-    public UserService(ObjectMapper objectMapper, UserRepository userRepository) {
+    public UserService(ObjectMapper objectMapper, UserRepository userRepository, ImageService imageService) {
         this.objectMapper = objectMapper;
         this.userRepository = userRepository;
+        this.imageService = imageService;
     }
 
     @Override
@@ -98,5 +101,13 @@ public class UserService implements UserDetailsService {
     public void saveUser(UserRegistrationBean userRegistrationBean) {
         User user = objectMapper.map(userRegistrationBean, User.class);
         saveUser(user);
+    }
+
+
+    public void setImage(int id, int imageId) {
+        User user = getById(id);
+        Image image = imageService.getImage(imageId);
+        user.setImage(image);
+        userRepository.save(user);
     }
 }

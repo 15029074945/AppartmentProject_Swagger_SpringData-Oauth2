@@ -11,11 +11,12 @@
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
 
+	<!-- lookup parent from repository -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.2.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 
 	<properties>
@@ -71,6 +72,13 @@
 			<groupId>ma.glasnost.orika</groupId>
 			<artifactId>orika-core</artifactId>
 			<version>${orika.version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/net.sf.jmimemagic/jmimemagic -->
+		<dependency>
+			<groupId>net.sf.jmimemagic</groupId>
+			<artifactId>jmimemagic</artifactId>
+			<version>0.1.4</version>
 		</dependency>
 
 	</dependencies>

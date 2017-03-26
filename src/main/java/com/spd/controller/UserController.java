@@ -1,5 +1,6 @@
 package com.spd.controller;
 
+import com.spd.bean.ImageBean;
 import com.spd.bean.UserInformationBean;
 import com.spd.bean.UserRegistrationBean;
 import com.spd.exception.ValidationException;
@@ -11,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Optional;
@@ -72,6 +70,12 @@ public class UserController {
     @ApiOperation(value = "delete user", httpMethod = "DELETE")
     public void deleteUser(Authentication authentication) {
         userService.deleteUser(authentication.getName());
+    }
+
+    @RequestMapping(value = "/{id}/image", method = RequestMethod.PUT)
+    @ApiOperation(value = "set image", httpMethod = "PUT")
+    public void setUserImage(@PathVariable("id") int id, @RequestBody ImageBean imageBean) {
+        userService.setImage(id, imageBean.getId());
     }
 
 }
