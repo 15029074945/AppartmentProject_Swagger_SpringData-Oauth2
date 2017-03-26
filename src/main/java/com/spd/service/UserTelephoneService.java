@@ -8,6 +8,7 @@ import com.spd.repository.UserTelephoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,16 +47,28 @@ public class UserTelephoneService {
         return userTelephoneRepository.save(userTelephone);
     }
 
-    public void deleteUserTelephone(int id) {
-        userTelephoneRepository
-                .findOneById(id)
-                .ifPresent(userTelephoneRepository::delete);
+    public void deleteUserTelephone(String email, int id) {
+        Optional<UserTelephone> userEmailOptional = userTelephoneRepository
+                .findOneById(id);
+        userEmailOptional.ifPresent(userEmail -> {
+            if (userEmail.getUser().getEmail().equals(email)) {
+                userTelephoneRepository.delete(id);
+            }
+            else {
+                // TODO
+            }
+        });
     }
 
-    public List<UserTelephoneBean> getListByEmail(String userEmail) {
-        int id = userService.getByEmail(userEmail).get().getId();
-        List<UserTelephone> userTelephones = userTelephoneRepository.findByUserId(id);
-        return objectMapper.mapAsList(userTelephones, UserTelephoneBean.class);
+    public List<UserTelephoneBean> getListByEmail(String email) {
+        Optional<User> userOptional = userService.getByEmail(email);
+        if (userOptional.isPresent()) {
+            List<UserTelephone> userEmails = userTelephoneRepository.findByUserId(userOptional.get().getId());
+            return objectMapper.mapAsList(userEmails, UserTelephoneBean.class);
+        }
+        else {
+            return new ArrayList<>();
+        }
     }
 
     /*public UserTelephone getUserTelephone(String extraTelephone) {
