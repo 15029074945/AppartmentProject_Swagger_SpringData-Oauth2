@@ -24,10 +24,26 @@ public class AddressController {
         this.addressService = addressService;
     }
 
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    @ApiOperation(value = "", httpMethod = "GET")
+    public AddressBean getAddress(Authentication authentication, @RequestBody int idAnnouncement) {
+        Address address = addressService.getAddressByAnnouncementId(authentication.getName(), idAnnouncement);
+        return objectMapper.map(address, AddressBean.class);
+    }
+
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create or update address", httpMethod = "POST")
-    public AddressBean createOrUpdateAnnouncement(Authentication authentication, @RequestBody AddressBean addressBean) {
+    public AddressBean createAnnouncement(Authentication authentication, @RequestBody AddressBean addressBean) {
+        Address address = objectMapper.map(addressBean, Address.class);
 
+        Address newAnnouncement = addressService.saveAddress(authentication.getName(), address, addressBean.getIdAnnouncement());
+
+        return objectMapper.map(newAnnouncement, AddressBean.class);
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.PUT)
+    @ApiOperation(value = "create or update address", httpMethod = "PUT")
+    public AddressBean updateAnnouncement(Authentication authentication, @RequestBody AddressBean addressBean) {
         Address address = objectMapper.map(addressBean, Address.class);
 
         Address newAnnouncement = addressService
@@ -38,8 +54,8 @@ public class AddressController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete address", httpMethod = "DELETE")
-    public void deleteAnnouncement(@PathVariable("id") int id) {
-        addressService.deleteAddress(id);
+    public void deleteAnnouncement(Authentication authentication, @RequestBody int idAnnouncement) {
+        addressService.deleteAddress(authentication.getName(), idAnnouncement);
     }
 
 }
