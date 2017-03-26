@@ -1,7 +1,6 @@
 package com.spd.controller;
 
 import com.spd.bean.PriceBean;
-import com.spd.mapper.ObjectMapper;
 import com.spd.service.PriceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,7 +21,7 @@ public class PriceController {
     private final PriceService priceService;
 
     @Autowired
-    public PriceController(ObjectMapper objectMapper, PriceService priceService) {
+    public PriceController(PriceService priceService) {
         this.priceService = priceService;
     }
 
