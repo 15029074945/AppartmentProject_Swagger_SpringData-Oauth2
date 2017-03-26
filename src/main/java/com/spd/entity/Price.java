@@ -24,6 +24,10 @@ public class Price {
     @JoinColumn(name = "ANNOUNCEMENT_ID")
     private Announcement announcement;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TYPE_ID")
+    private PriceType priceType;
+
     public Integer getId() {
         return id;
     }
