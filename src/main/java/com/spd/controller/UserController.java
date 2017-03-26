@@ -10,12 +10,12 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.xml.ws.Response;
 import java.security.Principal;
 import java.util.Optional;
 
@@ -34,22 +34,29 @@ public class UserController {
         this.objectMapper = objectMapper;
     }
 
-    @CrossOrigin(origins = "*") // http://localhost:3000
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create update user", httpMethod = "POST")
-    public void createOrUpdateUser(Authentication authentication, @RequestBody UserRegistrationBean userRegistrationBean) {
+    public void createUser(Authentication authentication, @RequestBody UserRegistrationBean userRegistrationBean) {
+        Optional<Authentication> authenticationOptional = Optional.ofNullable(authentication);
+        if (authenticationOptional.isPresent()) {
+            // TODO
+        }
+        else {
+            ValidationException
+                    .assertTrue(userRegistrationBean.getTermsChecked(), "User shutdown exception handling");
+            userService.saveUser(userRegistrationBean);
+            // TODO
+            // send email verification
+        }
+    }
 
-        ValidationException
-                .assertTrue(userRegistrationBean.getTermsChecked(),
-                        "User shutdown exception handling");
-
+    @RequestMapping(value = "", method = RequestMethod.PUT)
+    @ApiOperation(value = "create update user", httpMethod = "PUT")
+    public void updateUser(Authentication authentication, @RequestBody UserInformationBean userInformationBean) {
         userService
-                .saveUser(Optional
+                .updateUser(Optional
                         .ofNullable(authentication)
-                        .map(Principal::getName), userRegistrationBean);
-
-        // TODO
-        // send email verification
+                        .map(Principal::getName), userInformationBean);
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -59,6 +66,12 @@ public class UserController {
                 .getByEmail(authentication.getName())
                 .map(user -> objectMapper.map(user, UserInformationBean.class))
                 .orElse(new UserInformationBean());
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    @ApiOperation(value = "delete user", httpMethod = "DELETE")
+    public void deleteUser(Authentication authentication) {
+        userService.deleteUser(authentication.getName());
     }
 
 }

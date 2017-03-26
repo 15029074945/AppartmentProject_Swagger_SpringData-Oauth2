@@ -1,11 +1,11 @@
 package com.spd.service;
 
+import com.spd.bean.UserInformationBean;
 import com.spd.bean.UserRegistrationBean;
 import com.spd.entity.User;
 import com.spd.mapper.ObjectMapper;
 import com.spd.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -55,32 +55,48 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public boolean deleteUser(int id) {
-        try {
-            userRepository.delete(id);
-        } catch (EmptyResultDataAccessException e) {
-            return false;
+    public void deleteUser(String email) {
+        Optional<User> userOptional = userRepository.findOneByEmail(email);
+        if (userOptional.isPresent()) {
+            userRepository.delete(userOptional.get().getId());
         }
-        return true;
+        else {
+            // TODO
+        }
     }
 
     public Optional<User> getByEmail(String email) {
         return userRepository.findOneByEmail(email);
     }
 
-    public void saveUser(Optional<String> emailOptional, UserRegistrationBean userRegistrationBean) {
+    public void updateUser(Optional<String> emailOptional, UserInformationBean userInformationBean) {
         User newUser = emailOptional
                 .flatMap(userRepository::findOneByEmail)
-                .map(user -> updateUserWithUserRegistrationBean(user, userRegistrationBean))
-                .orElseGet(() -> objectMapper.map(userRegistrationBean, User.class));
+                .map(user -> updateUserWithUserRegistrationBean(user, userInformationBean))
+                .orElseGet(() -> objectMapper.map(userInformationBean, User.class));
         saveUser(newUser);
     }
 
-    private User updateUserWithUserRegistrationBean(User user, UserRegistrationBean userRegistrationBean) {
-        user.setFirstName(userRegistrationBean.getFirstName());
-        user.setLastName(userRegistrationBean.getLastName());
-        user.setPassword(userRegistrationBean.getPassword());
-        user.setActive(true);
+    public void saveUser(Optional<String> emailOptional, UserRegistrationBean userRegistrationBean) {
+        Optional<User> userOptional = emailOptional
+                .flatMap(userRepository::findOneByEmail);
+        if (userOptional.isPresent()) {
+            saveUser(userOptional.get());
+        }
+        else {
+            // TODO
+        }
+    }
+
+    private User updateUserWithUserRegistrationBean(User user, UserInformationBean userInformationBean) {
+        user.setFirstName(userInformationBean.getFirstName());
+        user.setLastName(userInformationBean.getLastName());
+        user.setPassword(userInformationBean.getPassword());
         return user;
+    }
+
+    public void saveUser(UserRegistrationBean userRegistrationBean) {
+        User user = objectMapper.map(userRegistrationBean, User.class);
+        saveUser(user);
     }
 }
