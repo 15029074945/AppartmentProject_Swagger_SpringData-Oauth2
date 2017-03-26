@@ -26,8 +26,17 @@ public class AnnouncementController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create announcement", httpMethod = "POST")
-    public AnnouncementBean createOrUpdateAnnouncement(Authentication authentication, @RequestBody AnnouncementBean announcementBean) {
+    public AnnouncementBean create(Authentication authentication, @RequestBody AnnouncementBean announcementBean) {
+        return createOrUpdateAnnouncement(authentication, announcementBean);
+    }
 
+    @RequestMapping(value = "", method = RequestMethod.PUT)
+    @ApiOperation(value = "update announcement", httpMethod = "PUT")
+    public AnnouncementBean update(Authentication authentication, @RequestBody AnnouncementBean announcementBean) {
+        return createOrUpdateAnnouncement(authentication, announcementBean);
+    }
+
+    private AnnouncementBean createOrUpdateAnnouncement(Authentication authentication, @RequestBody AnnouncementBean announcementBean) {
         Announcement announcement = objectMapper.map(announcementBean, Announcement.class);
 
         Announcement newAnnouncement = announcementService
@@ -38,8 +47,8 @@ public class AnnouncementController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete announcement", httpMethod = "DELETE")
-    public void deleteAnnouncement(@PathVariable("id") int id) {
-        announcementService.deleteAnnouncement(id);
+    public void delete(Authentication authentication, @RequestBody int id) {
+        announcementService.deleteAnnouncement(authentication.getName(), id);
     }
 
 }

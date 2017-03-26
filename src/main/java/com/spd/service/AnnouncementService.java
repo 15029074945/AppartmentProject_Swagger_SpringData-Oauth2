@@ -23,14 +23,26 @@ public class AnnouncementService {
         this.userService = userService;
     }
 
-    public void deleteAnnouncement(int idAnnouncement) {
-        announcementRepository.delete(idAnnouncement);
+    public void deleteAnnouncement(String email, int id) {
+        Announcement announcement = announcementRepository.findOne(id);
+        if (announcement.getUser().getEmail().equals(email)) {
+            announcementRepository.delete(id);
+        }
+        else {
+            // TODO
+        }
     }
 
     public Announcement saveAnnouncement(String email, Announcement announcement) {
         Optional<User> userOptional = userService.getByEmail(email);
-        announcement.setUser(userOptional.get());
-        return announcementRepository.save(announcement);
+        if (userOptional.isPresent()) {
+            announcement.setUser(userOptional.get());
+            return announcementRepository.save(announcement);
+        }
+        else {
+            // TODO
+            return new Announcement();
+        }
     }
 
     public Optional<Announcement> getById(Integer id) {
