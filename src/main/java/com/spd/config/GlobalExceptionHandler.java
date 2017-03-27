@@ -12,9 +12,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorModelBean> handleError(Exception ex) {
 
-        ErrorModelBean errorModelBean = new ErrorModelBean(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+        ErrorModelBean errorModelBean = new ErrorModelBean(ex.getMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value());
 
         return new ResponseEntity<>(errorModelBean, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(value = LoginAuthenticationProvider.AuthenticationExceptionImpl.class)
+    public ResponseEntity<ErrorModelBean> handleAuthentication(Exception ex) {
+        ErrorModelBean errorModelBean = new ErrorModelBean(ex.getMessage(),
+                HttpStatus.UNAUTHORIZED.value());
+
+        return new ResponseEntity<>(errorModelBean, HttpStatus.UNAUTHORIZED);
     }
 /*
     @ExceptionHandler(value = RuntimeException.class)
