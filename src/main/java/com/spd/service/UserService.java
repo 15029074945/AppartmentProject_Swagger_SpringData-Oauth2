@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -131,7 +132,7 @@ public class UserService /*implements UserDetailsService*/ {
         userRepository.save(user);
     }
 
-    public void registration(User user) {
+    public void registration(User user) throws MessagingException {
         String token = userTokenService.createToken();
         userTokenService.saveToken(user, token);
 

@@ -1,5 +1,7 @@
 package com.spd.controller;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import com.spd.bean.ErrorModelBean;
 import com.spd.bean.ImageBean;
 import com.spd.bean.UserInformationBean;
 import com.spd.bean.UserRegistrationBean;
@@ -12,10 +14,15 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.security.Principal;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Optional;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -35,7 +42,7 @@ public class UserController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create update user", httpMethod = "POST")
-    public void createUser(Authentication authentication, @RequestBody UserRegistrationBean userRegistrationBean) {
+    public ResponseEntity<String> createUser(Authentication authentication, @RequestBody UserRegistrationBean userRegistrationBean) {
         Optional<Authentication> authenticationOptional = Optional.ofNullable(authentication);
         if (authenticationOptional.isPresent()) {
             // TODO
@@ -44,9 +51,19 @@ public class UserController {
             ValidationException
                     .assertTrue(userRegistrationBean.getTermsChecked(), "User shutdown exception handling");
 
-            User user = userService.saveUser(userRegistrationBean);
-            userService.registration(user);
+            User user = null;
+            try {
+                user = userService.saveUser(userRegistrationBean);
+            } catch (Exception e) {
+                return new ResponseEntity<>("Error save. User is registered", HttpStatus.BAD_REQUEST);
+            }
+            try {
+                userService.registration(user);
+            } catch (MessagingException e) {
+                return new ResponseEntity<>("Error send message", HttpStatus.BAD_REQUEST);
+            }
         }
+        return new ResponseEntity<>("Message send", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/verify", method = RequestMethod.POST)

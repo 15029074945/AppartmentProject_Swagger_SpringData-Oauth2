@@ -11,7 +11,7 @@ public class EmailUtil {
 
     private static Session session = null;
     private static Properties properties = null;
-    
+
     public static Session getSession() {
         if (session != null) {
             return session;
@@ -21,7 +21,7 @@ public class EmailUtil {
             return session;
         }
     }
-    
+
     public static Properties getProperties() {
         if (properties != null) {
             return properties;
@@ -35,7 +35,7 @@ public class EmailUtil {
     private static void createProperties() {
         properties = new Properties();
         properties.put(MAIL_SMTP_USERNAME, "zewsoftware@gmail.com");
-        properties.put("mail.smtp.password", "qwerty94");
+        properties.put("mail.smtp.password", "rootrootroot");
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
