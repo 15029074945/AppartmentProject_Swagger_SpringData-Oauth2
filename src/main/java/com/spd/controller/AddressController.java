@@ -34,25 +34,18 @@ public class AddressController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create or update address", httpMethod = "POST")
     public AddressBean createAnnouncement(Authentication authentication, @RequestBody AddressBean addressBean) {
-        Address address = objectMapper.map(addressBean, Address.class);
-
-        Address newAnnouncement = addressService.saveAddress(authentication.getName(), address, addressBean.getIdAnnouncement());
-
-        return objectMapper.map(newAnnouncement, AddressBean.class);
+        return addressService.
+                saveAddress(authentication.getName(), addressBean);
     }
 
     @RequestMapping(value = "", method = RequestMethod.PUT)
     @ApiOperation(value = "create or update address", httpMethod = "PUT")
     public AddressBean updateAnnouncement(Authentication authentication, @RequestBody AddressBean addressBean) {
-        Address address = objectMapper.map(addressBean, Address.class);
-
-        Address newAnnouncement = addressService
-                .saveAddress(authentication.getName(), address, addressBean.getIdAnnouncement());
-
-        return objectMapper.map(newAnnouncement, AddressBean.class);
+        return addressService
+                .saveAddress(authentication.getName(), addressBean);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete address", httpMethod = "DELETE")
     public void deleteAnnouncement(Authentication authentication, @RequestBody int idAnnouncement) {
         addressService.deleteAddress(authentication.getName(), idAnnouncement);

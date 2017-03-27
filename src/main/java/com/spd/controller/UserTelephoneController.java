@@ -26,14 +26,14 @@ public class UserTelephoneController {
         this.objectMapper = objectMapper;
     }
 
-    @RequestMapping(value = "/{telephone}", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "add extra telephone", httpMethod = "POST")
     public UserTelephoneBean addExtraTelephone(Authentication authentication, @RequestBody String telephone) {
         UserTelephone userTelephone = userTelephoneService.saveUserTelephone(authentication.getName(), telephone);
         return objectMapper.map(userTelephone, UserTelephoneBean.class);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete extra telephone", httpMethod = "DELETE")
     public void deleteExtraTelephone(Authentication authentication, @RequestBody int id) {
         userTelephoneService.deleteUserTelephone(authentication.getName(), id);

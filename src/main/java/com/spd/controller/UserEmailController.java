@@ -26,14 +26,14 @@ public class UserEmailController {
         this.objectMapper = objectMapper;
     }
 
-    @RequestMapping(value = "/{email}", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "add extra email", httpMethod = "POST")
     public UserEmailBean addExtraEmail(Authentication authentication, @RequestBody String email) {
         UserEmail userEmail = userEmailService.saveUserEmail(authentication.getName(), email);
         return objectMapper.map(userEmail, UserEmailBean.class);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete extra email", httpMethod = "DELETE")
     public void deleteExtraEmail(Authentication authentication, @RequestBody int id) {
         userEmailService.deleteUserEmail(authentication.getName(), id);
