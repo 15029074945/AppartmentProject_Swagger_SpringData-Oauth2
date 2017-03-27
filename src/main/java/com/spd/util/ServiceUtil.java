@@ -1,4 +1,4 @@
-package com.spd.service;
+package com.spd.util;
 
 import com.spd.entity.Announcement;
 import com.spd.entity.User;
