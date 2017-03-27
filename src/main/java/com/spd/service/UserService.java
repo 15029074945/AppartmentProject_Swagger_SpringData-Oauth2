@@ -4,32 +4,36 @@ import com.spd.bean.UserInformationBean;
 import com.spd.bean.UserRegistrationBean;
 import com.spd.entity.Image;
 import com.spd.entity.User;
+import com.spd.entity.UserToken;
 import com.spd.mapper.ObjectMapper;
 import com.spd.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService /*implements UserDetailsService*/ {
 
     private final ObjectMapper objectMapper;
+    private final UserTokenService userTokenService;
+    private final EmailService emailService;
     private final UserRepository userRepository;
     private final ImageService imageService;
 
     @Autowired
-    public UserService(ObjectMapper objectMapper, UserRepository userRepository, ImageService imageService) {
+    public UserService(ObjectMapper objectMapper, UserTokenService userTokenService, EmailService emailService, UserRepository userRepository, ImageService imageService) {
         this.objectMapper = objectMapper;
+        this.userTokenService = userTokenService;
+        this.emailService = emailService;
         this.userRepository = userRepository;
         this.imageService = imageService;
     }
 
-    @Override
+    /*@Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         Optional<User> userOptional = userRepository.findOneByEmail(email);
@@ -42,16 +46,32 @@ public class UserService implements UserDetailsService {
                 true,
                 true,
                 true,
-                new ArrayList<>()
-        )).orElseThrow(() -> new UsernameNotFoundException("Not user TODO"));
+                getAuthorities()
+        )).orElseGet(() -> getErrorUser(email));
+    }
+
+    private org.springframework.security.core.userdetails.User getErrorUser(String email) {
+        return new org.springframework.security.core.userdetails.User(
+                email,
+                "",
+                false,
+                false,
+                false,
+                false,
+                getAuthorities()
+        );
+    }*/
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new ArrayList<>();
     }
 
     public User getById(int id) {
         return userRepository.getOne(id);
     }
 
-    public void saveUser(User user) {
-        userRepository.save(user);
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
 
     public void updateUser(User user) {
@@ -98,9 +118,9 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public void saveUser(UserRegistrationBean userRegistrationBean) {
+    public User saveUser(UserRegistrationBean userRegistrationBean) {
         User user = objectMapper.map(userRegistrationBean, User.class);
-        saveUser(user);
+        return saveUser(user);
     }
 
 
@@ -110,4 +130,22 @@ public class UserService implements UserDetailsService {
         user.setImage(image);
         userRepository.save(user);
     }
+
+    public void registration(User user) {
+        String token = userTokenService.createToken();
+        userTokenService.saveToken(user, token);
+
+        String link = emailService.createLink(token);
+        emailService.sendMail(user.getEmail(), link);
+    }
+
+    public void verification(String token) {
+        Optional<UserToken> userTokenOptional = userTokenService.getUserTokenByToken(token);
+        if (userTokenOptional.isPresent()) {
+            User user = userTokenOptional.get().getUser();
+            user.setActive(true);
+            userRepository.save(user);
+        }
+    }
+
 }
