@@ -3,6 +3,7 @@ package com.spd.controller;
 import com.spd.bean.ImageBean;
 import com.spd.bean.UserInformationBean;
 import com.spd.bean.UserRegistrationBean;
+import com.spd.entity.User;
 import com.spd.exception.ValidationException;
 import com.spd.mapper.ObjectMapper;
 import com.spd.service.UserService;
@@ -42,10 +43,16 @@ public class UserController {
         else {
             ValidationException
                     .assertTrue(userRegistrationBean.getTermsChecked(), "User shutdown exception handling");
-            userService.saveUser(userRegistrationBean);
-            // TODO
-            // send email verification
+
+            User user = userService.saveUser(userRegistrationBean);
+            userService.registration(user);
         }
+    }
+
+    @RequestMapping(value = "/verify", method = RequestMethod.POST)
+    @ApiOperation(value = "verify user", httpMethod = "POST")
+    public void verificationUser(@RequestBody String token) {
+        userService.verification(token);
     }
 
     @RequestMapping(value = "", method = RequestMethod.PUT)
