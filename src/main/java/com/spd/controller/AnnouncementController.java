@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/announcements")
 @Api(value = "announcements")
@@ -22,6 +24,12 @@ public class AnnouncementController {
     public AnnouncementController(ObjectMapper objectMapper, AnnouncementService announcementService) {
         this.objectMapper = objectMapper;
         this.announcementService = announcementService;
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    @ApiOperation(value = "get announcement", httpMethod = "GET")
+    public List<AnnouncementBean> getAnnouncement(Authentication authentication) {
+        return announcementService.getAnnouncementByUserEmail(authentication.getName());
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
@@ -45,7 +53,7 @@ public class AnnouncementController {
         return objectMapper.map(newAnnouncement, AnnouncementBean.class);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete announcement", httpMethod = "DELETE")
     public void delete(Authentication authentication, @RequestBody int id) {
         announcementService.deleteAnnouncement(authentication.getName(), id);
