@@ -3,6 +3,7 @@ package com.spd.controller;
 import com.spd.bean.ImageBean;
 import com.spd.entity.Image;
 import com.spd.service.ImageService;
+import com.spd.validator.FileValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.sf.jmimemagic.Magic;
@@ -13,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 
@@ -23,7 +23,6 @@ import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 public class ImageController {
 
     private final ImageService imageService;
-    private final String[] allowedMimeTypes = {"image/jpeg", "image/png", "image/gif"};
 
     @Autowired
     ImageController(ImageService imageService) {
@@ -34,13 +33,15 @@ public class ImageController {
     @ApiOperation(value = "upload image", httpMethod = "POST")
     public ImageBean uploadImage(@RequestParam(value = "image") MultipartFile imageFile, HttpServletResponse response) throws IOException {
         String mimeType;
+        FileValidator fileValidator = new FileValidator();
         try {
             MagicMatch match = Magic.getMagicMatch(imageFile.getBytes());
             mimeType = match.getMimeType();
         } catch (Exception e) {
             mimeType = "";
         }
-        if (!Arrays.asList(allowedMimeTypes).contains(mimeType)) {
+
+        if (!fileValidator.validate(mimeType, imageFile)) {
             response.setStatus(SC_BAD_REQUEST);
             return null;
         }
