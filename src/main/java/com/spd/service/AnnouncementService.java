@@ -1,5 +1,6 @@
 package com.spd.service;
 
+import com.spd.bean.AnnouncementBean;
 import com.spd.entity.Announcement;
 import com.spd.entity.User;
 import com.spd.mapper.ObjectMapper;
@@ -7,6 +8,7 @@ import com.spd.repository.AnnouncementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,10 +48,15 @@ public class AnnouncementService {
     }
 
     public Optional<Announcement> getById(Integer id) {
-        return announcementRepository.findOneByUserId(id);
+        return announcementRepository.findOneById(id);
     }
 
     public void saveAnnouncement(Announcement announcement) {
         announcementRepository.save(announcement);
+    }
+
+    public List<AnnouncementBean> getAnnouncementByUserEmail(String email) {
+        Optional<User> userOptional = userService.getByEmail(email);
+        return announcementRepository.findByUserId(userOptional.get().getId());
     }
 }
