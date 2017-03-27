@@ -3,7 +3,6 @@ package com.spd.service;
 import com.spd.bean.PriceBean;
 import com.spd.entity.Announcement;
 import com.spd.entity.Price;
-import com.spd.entity.PriceType;
 import com.spd.entity.User;
 import com.spd.repository.PriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +18,12 @@ public class PriceService {
     private final UserService userService;
     private final AnnouncementService announcementService;
     private final PriceRepository priceRepository;
-    private final PriceTypeService priceTypeService;
 
     @Autowired
-    public PriceService(UserService userService, AnnouncementService announcementService, PriceTypeService priceTypeService, PriceRepository priceRepository, PriceTypeService priceTypeService1) {
+    public PriceService(UserService userService, AnnouncementService announcementService, PriceRepository priceRepository) {
         this.userService = userService;
         this.announcementService = announcementService;
         this.priceRepository = priceRepository;
-        this.priceTypeService = priceTypeService1;
     }
 
     public List<PriceBean> getPrices(String email, int idAnnouncement) {
@@ -40,7 +37,7 @@ public class PriceService {
                 PriceBean priceBean = new PriceBean();
                 priceBean.setIdAnnouncement(idAnnouncement);
                 priceBean.setPrice(price.getPrice());
-                priceBean.setType(price.getPriceType().getType());
+                priceBean.setType(price.getType());
                 result.add(priceBean);
             }
             return result;
@@ -62,8 +59,7 @@ public class PriceService {
             for (PriceBean priceBean : priceBeans) {
                 Price price = new Price();
                 price.setAnnouncement(announcementOptional.get());
-                PriceType priceType = priceTypeService.getPriceTypeByType(priceBean.getType());
-                price.setPriceType(priceType);
+                price.setType(priceBean.getType());
                 price.setPrice(priceBean.getPrice());
                 priceRepository.save(price);
             }

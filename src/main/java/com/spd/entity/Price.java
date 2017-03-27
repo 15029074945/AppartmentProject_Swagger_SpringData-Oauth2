@@ -14,16 +14,15 @@ public class Price {
     @Column(name = "PRICE")
     private BigDecimal price;
 
+    @Column(name = "TYPE")
+    private String type;
+
     @Column(name = "ACTIVE")
     private Boolean active;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ANNOUNCEMENT_ID")
     private Announcement announcement;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TYPE_ID")
-    private PriceType priceType;
 
     public Integer getId() {
         return id;
@@ -39,6 +38,14 @@ public class Price {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Announcement getAnnouncement() {
@@ -57,11 +64,4 @@ public class Price {
         this.active = active;
     }
 
-    public PriceType getPriceType() {
-        return priceType;
-    }
-
-    public void setPriceType(PriceType priceType) {
-        this.priceType = priceType;
-    }
 }

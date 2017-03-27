@@ -1,6 +1,7 @@
 package com.spd.entity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "ADDRESS")
@@ -26,10 +27,10 @@ public class Address {
     private String appartment;
 
     @Column(name = "LATITUDE")
-    private String latitude;
+    private BigDecimal latitude;
 
     @Column(name = "LONGITUDE")
-    private String longitude;
+    private BigDecimal longitude;
 
     public Integer getId() {
         return id;
@@ -79,20 +80,19 @@ public class Address {
         this.appartment = appartment;
     }
 
-    public String getLatitude() {
+    public BigDecimal getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public BigDecimal getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
     }
-
 }

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.spd.service.ServiceUtil.isAuthenticationUserAnnouncement;
+import static com.spd.util.ServiceUtil.isAuthenticationUserAnnouncement;
 
 @Service
 public class AnnouncementFacilityService {
