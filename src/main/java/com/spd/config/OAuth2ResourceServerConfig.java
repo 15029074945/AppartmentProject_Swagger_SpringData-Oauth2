@@ -35,6 +35,8 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                             .permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**")
                     .permitAll()
+                .antMatchers("/api/v1/users/verify")
+                    .permitAll()
                 .anyRequest().authenticated();
     }
 
