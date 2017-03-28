@@ -33,4 +33,12 @@ public class UserTokenService {
     public Optional<UserToken> getUserTokenByToken(String token) {
         return userTokenRepository.findOneByToken(token);
     }
+
+    public void deleteToken(UserToken userToken) {
+        userTokenRepository.delete(userToken);
+    }
+
+    public Optional<UserToken> getUserTokenByUser(User user) {
+        return userTokenRepository.findOneByUserId(user.getId());
+    }
 }
