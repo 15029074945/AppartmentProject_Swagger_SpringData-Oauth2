@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 //@EnableWebMvc
-@ControllerAdvice(basePackages = "com/spd")
+//@ControllerAdvice(basePackages = "com/spd")
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
