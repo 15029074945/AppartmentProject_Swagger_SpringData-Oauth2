@@ -16,7 +16,6 @@ import java.util.Optional;
 public class UserTelephoneService {
 
     private final ObjectMapper objectMapper;
-
     private final UserService userService;
     private final UserTelephoneRepository userTelephoneRepository;
 
@@ -27,16 +26,17 @@ public class UserTelephoneService {
         this.userTelephoneRepository = userTelephoneRepository;
     }
 
-    public UserTelephone saveUserTelephone(String userEmail, String extraTelephone) {
+    public UserTelephoneBean saveUserTelephone(String userEmail, String extraTelephone) {
         Optional<User> userOptional = userService.getByEmail(userEmail);
         if (userOptional.isPresent()) {
             int userId = userOptional.get().getId();
             Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findByUserIdAndTelephone(userId, extraTelephone);
             if (!userEmailOptional.isPresent()) {
-                return createUserTelephone(userId, extraTelephone);
+                UserTelephone userTelephone = createUserTelephone(userId, extraTelephone);
+                return objectMapper.map(userTelephone, UserTelephoneBean.class);
             }
         }
-        return new UserTelephone();
+        return new UserTelephoneBean();
     }
 
     private UserTelephone createUserTelephone(int userId, String email) {
@@ -68,6 +68,17 @@ public class UserTelephoneService {
         }
         else {
             return new ArrayList<>();
+        }
+    }
+
+    public void updateUserTelephone(String email, UserTelephoneBean userTelephoneBean) {
+        Optional<User> userOptional = userService.getByEmail(email);
+        Optional<UserTelephone> userTelephoneOptional = userTelephoneRepository.findOneById(userTelephoneBean.getId());
+        if (userOptional.isPresent() && userTelephoneOptional.isPresent() &&
+                userOptional.get().getId().equals(userTelephoneOptional.get().getUser().getId())) {
+            UserTelephone userTelephone = userTelephoneOptional.get();
+            userTelephone.setTelephone(userTelephoneBean.getTelephone());
+            userTelephoneRepository.save(userTelephone);
         }
     }
 

@@ -18,19 +18,22 @@ import java.util.List;
 public class UserTelephoneController {
 
     private final UserTelephoneService userTelephoneService;
-    private final ObjectMapper objectMapper;
 
     @Autowired
-    public UserTelephoneController(UserTelephoneService userTelephoneService, ObjectMapper objectMapper) {
+    public UserTelephoneController(UserTelephoneService userTelephoneService) {
         this.userTelephoneService = userTelephoneService;
-        this.objectMapper = objectMapper;
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "add extra telephone", httpMethod = "POST")
     public UserTelephoneBean addExtraTelephone(Authentication authentication, @RequestBody String telephone) {
-        UserTelephone userTelephone = userTelephoneService.saveUserTelephone(authentication.getName(), telephone);
-        return objectMapper.map(userTelephone, UserTelephoneBean.class);
+        return userTelephoneService.saveUserTelephone(authentication.getName(), telephone);
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.PUT)
+    @ApiOperation(value = "update extra telephone", httpMethod = "PUT")
+    public void updateExtraEmail(Authentication authentication, @RequestBody UserTelephoneBean userTelephoneBean) {
+        userTelephoneService.updateUserTelephone(authentication.getName(), userTelephoneBean);
     }
 
     @RequestMapping(value = "", method = RequestMethod.DELETE)
