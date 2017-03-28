@@ -8,7 +8,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -27,23 +26,31 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-
         String authenticationEmail = authentication.getName();
         String authenticationPassword = authentication.getCredentials().toString();
-
         String userEmail = null;
         String userPassword = null;
         Optional<User> userOptional = userService.getByEmail(authenticationEmail);
+        User user = null;
+        Boolean status = null;
         if (userOptional.isPresent()) {
-            userEmail = userOptional.get().getEmail();
-            userPassword = userOptional.get().getPassword();
+            user = userOptional.get();
+            userEmail = user.getEmail();
+            userPassword = user.getPassword();
+            status = user.getStatus();
         }
-
+        else {
+            throw new AuthenticationExceptionImpl("Error email");
+        }
         if (!authenticationEmail.equals(userEmail)) {
             throw new AuthenticationExceptionImpl("Error email");
         }
         else if (!authenticationPassword.equals(userPassword)) {
             throw new AuthenticationExceptionImpl("Error password");
+        }
+        else if (!status) {
+            userService.repeatSendEmail(user);
+            throw new AuthenticationExceptionImpl("Authorize your mail");
         }
         else {
             List<GrantedAuthority> grantedAuths = new ArrayList<>();
