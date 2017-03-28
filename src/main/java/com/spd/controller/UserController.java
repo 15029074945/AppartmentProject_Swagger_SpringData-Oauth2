@@ -1,7 +1,5 @@
 package com.spd.controller;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-import com.spd.bean.ErrorModelBean;
 import com.spd.bean.ImageBean;
 import com.spd.bean.UserInformationBean;
 import com.spd.bean.UserRegistrationBean;
@@ -21,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.security.Principal;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Optional;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -46,6 +42,7 @@ public class UserController {
         Optional<Authentication> authenticationOptional = Optional.ofNullable(authentication);
         if (authenticationOptional.isPresent()) {
             // TODO
+            return new ResponseEntity<>("Can not create a new user", HttpStatus.BAD_REQUEST);
         }
         else {
             ValidationException
@@ -53,17 +50,23 @@ public class UserController {
 
             User user = null;
             try {
-                user = userService.saveUser(userRegistrationBean);
+                user = userService.createUser(userRegistrationBean);
             } catch (Exception e) {
                 return new ResponseEntity<>("Error save. User is registered", HttpStatus.BAD_REQUEST);
             }
             try {
                 userService.registration(user);
             } catch (MessagingException e) {
-                return new ResponseEntity<>("Error send message", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Error send message", HttpStatus.OK);
             }
+            return new ResponseEntity<>("Message send", HttpStatus.OK);
         }
-        return new ResponseEntity<>("Message send", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/pass", method = RequestMethod.POST)
+    @ApiOperation(value = "change password", httpMethod = "POST")
+    public void changePassword(Authentication authentication, @RequestBody String password) {
+        userService.changePassword(authentication.getName(), password);
     }
 
     @RequestMapping(value = "/verify", method = RequestMethod.POST)
