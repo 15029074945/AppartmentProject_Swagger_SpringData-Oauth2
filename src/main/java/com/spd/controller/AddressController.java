@@ -15,34 +15,29 @@ import org.springframework.web.bind.annotation.*;
 @Api(value = "address")
 public class AddressController {
 
-    private final ObjectMapper objectMapper;
     private final AddressService addressService;
 
     @Autowired
-    public AddressController(ObjectMapper objectMapper, AddressService addressService) {
-        this.objectMapper = objectMapper;
+    public AddressController(AddressService addressService) {
         this.addressService = addressService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "", httpMethod = "GET")
     public AddressBean getAddress(Authentication authentication, @RequestBody int idAnnouncement) {
-        Address address = addressService.getAddressByAnnouncementId(authentication.getName(), idAnnouncement);
-        return objectMapper.map(address, AddressBean.class);
+        return addressService.getAddressByAnnouncementId(authentication.getName(), idAnnouncement);
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create or update address", httpMethod = "POST")
     public AddressBean createAnnouncement(Authentication authentication, @RequestBody AddressBean addressBean) {
-        return addressService.
-                saveAddress(authentication.getName(), addressBean);
+        return addressService.saveAddress(authentication.getName(), addressBean);
     }
 
     @RequestMapping(value = "", method = RequestMethod.PUT)
     @ApiOperation(value = "create or update address", httpMethod = "PUT")
     public AddressBean updateAnnouncement(Authentication authentication, @RequestBody AddressBean addressBean) {
-        return addressService
-                .saveAddress(authentication.getName(), addressBean);
+        return addressService.saveAddress(authentication.getName(), addressBean);
     }
 
     @RequestMapping(value = "", method = RequestMethod.DELETE)

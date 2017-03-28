@@ -55,17 +55,22 @@ public class AddressService {
         }
     }
 
-    public Address getAddressByAnnouncementId(String email, int idAnnouncement) {
+    public AddressBean getAddressByAnnouncementId(String email, int idAnnouncement) {
         Optional<Announcement> announcementOptional = announcementService.getById(idAnnouncement);
         Optional<User> userOptional = userService.getByEmail(email);
         if (announcementOptional.isPresent() && userOptional.isPresent()) {
             if (announcementOptional.get().getUser().getEmail().equals(userOptional.get().getEmail())) {
-                return announcementOptional.get().getAddress();
+                Address address = announcementOptional.get().getAddress();
+                return objectMapper.map(address, AddressBean.class);
+            }
+            else {
+                // TODO
+                return new AddressBean();
             }
         }
         else {
             // TODO
+            return new AddressBean();
         }
-        return null;
     }
 }
