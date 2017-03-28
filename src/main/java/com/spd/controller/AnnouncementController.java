@@ -18,18 +18,22 @@ import java.util.List;
 public class AnnouncementController {
 
     private final AnnouncementService announcementService;
-    private final ObjectMapper objectMapper;
 
     @Autowired
-    public AnnouncementController(ObjectMapper objectMapper, AnnouncementService announcementService) {
-        this.objectMapper = objectMapper;
+    public AnnouncementController(AnnouncementService announcementService) {
         this.announcementService = announcementService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
+    @ApiOperation(value = "get announcements list", httpMethod = "GET")
+    public List<AnnouncementBean> getAnnouncements(Authentication authentication) {
+        return announcementService.getAnnouncementsByUserEmail(authentication.getName());
+    }
+
+    @RequestMapping(value = "/id", method = RequestMethod.GET)
     @ApiOperation(value = "get announcement", httpMethod = "GET")
-    public List<AnnouncementBean> getAnnouncement(Authentication authentication) {
-        return announcementService.getAnnouncementByUserEmail(authentication.getName());
+    public AnnouncementBean getAnnouncement(Authentication authentication, @RequestParam int id) {
+        return announcementService.getAnnouncementById(authentication.getName(), id);
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
@@ -45,12 +49,7 @@ public class AnnouncementController {
     }
 
     private AnnouncementBean createOrUpdateAnnouncement(Authentication authentication, @RequestBody AnnouncementBean announcementBean) {
-        Announcement announcement = objectMapper.map(announcementBean, Announcement.class);
-
-        Announcement newAnnouncement = announcementService
-                .saveAnnouncement(authentication.getName(), announcement);
-
-        return objectMapper.map(newAnnouncement, AnnouncementBean.class);
+        return announcementService.saveAnnouncement(authentication.getName(), announcementBean);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.DELETE)
