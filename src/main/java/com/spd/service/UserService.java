@@ -101,26 +101,15 @@ public class UserService /*implements UserDetailsService*/ {
         saveUser(newUser);
     }
 
-    public void saveUser(Optional<String> emailOptional, UserRegistrationBean userRegistrationBean) {
-        Optional<User> userOptional = emailOptional
-                .flatMap(userRepository::findOneByEmail);
-        if (userOptional.isPresent()) {
-            saveUser(userOptional.get());
-        }
-        else {
-            // TODO
-        }
-    }
-
     private User updateUserWithUserRegistrationBean(User user, UserInformationBean userInformationBean) {
         user.setFirstName(userInformationBean.getFirstName());
         user.setLastName(userInformationBean.getLastName());
-        user.setPassword(userInformationBean.getPassword());
         return user;
     }
 
-    public User saveUser(UserRegistrationBean userRegistrationBean) {
+    public User createUser(UserRegistrationBean userRegistrationBean) {
         User user = objectMapper.map(userRegistrationBean, User.class);
+        user.setStatus(false);
         return saveUser(user);
     }
 
@@ -144,9 +133,38 @@ public class UserService /*implements UserDetailsService*/ {
         Optional<UserToken> userTokenOptional = userTokenService.getUserTokenByToken(token);
         if (userTokenOptional.isPresent()) {
             User user = userTokenOptional.get().getUser();
-            user.setActive(true);
+            user.setStatus(true);
             userRepository.save(user);
+            userTokenService.deleteToken(userTokenOptional.get());
         }
     }
 
+    public void repeatSendEmail(User user) {
+        Optional<UserToken> userTokenOptional = userTokenService.getUserTokenByUser(user);
+        if (userTokenOptional.isPresent()) {
+            String token = userTokenOptional.get().getToken();
+            String link = emailService.createLink(token);
+            try {
+                emailService.sendMail(user.getEmail(), link);
+            } catch (MessagingException ignored) {
+                // TODO
+            }
+        }
+        else {
+            try {
+                registration(user);
+            } catch (MessagingException ignored) {
+                // TODO
+            }
+        }
+    }
+
+    public void changePassword(String email, String password) {
+        Optional<User> userOptional = userRepository.findOneByEmail(email);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setPassword(password);
+            userRepository.save(user);
+        }
+    }
 }
