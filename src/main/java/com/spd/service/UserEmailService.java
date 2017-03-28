@@ -27,16 +27,17 @@ public class UserEmailService {
         this.objectMapper = objectMapper;
     }
 
-    public UserEmail saveUserEmail(String userEmail, String extraEmail) {
-        Optional<User> userOptional = userService.getByEmail(userEmail);
+    public UserEmailBean saveUserEmail(String email, String extraEmail) {
+        Optional<User> userOptional = userService.getByEmail(email);
         if (userOptional.isPresent()) {
             int userId = userOptional.get().getId();
             Optional<UserEmail> userEmailOptional = userEmailRepository.findByUserIdAndEmail(userId, extraEmail);
             if (!userEmailOptional.isPresent()) {
-                return createUserEmail(userId, extraEmail);
+                UserEmail userEmail = createUserEmail(userId, extraEmail);
+                return objectMapper.map(userEmail, UserEmailBean.class);
             }
         }
-        return new UserEmail();
+        return new UserEmailBean();
     }
 
     private UserEmail createUserEmail(int userId, String email) {
@@ -77,5 +78,16 @@ public class UserEmailService {
             return userEmailOptional.get();
         }
         throw new NullPointerException("Not found user with email");
+    }
+
+    public void updateUserEmail(String email, UserEmailBean userEmailBean) {
+        Optional<User> userOptional = userService.getByEmail(email);
+        Optional<UserEmail> userEmailOptional = userEmailRepository.findOneById(userEmailBean.getId());
+        if (userOptional.isPresent() && userEmailOptional.isPresent() &&
+                userOptional.get().getId().equals(userEmailOptional.get().getUser().getId())) {
+            UserEmail userEmail = userEmailOptional.get();
+            userEmail.setEmail(userEmailBean.getEmail());
+            userEmailRepository.save(userEmail);
+        }
     }
 }

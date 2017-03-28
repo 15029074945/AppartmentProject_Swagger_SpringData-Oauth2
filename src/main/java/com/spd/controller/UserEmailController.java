@@ -18,19 +18,22 @@ import java.util.List;
 public class UserEmailController {
 
     private final UserEmailService userEmailService;
-    private final ObjectMapper objectMapper;
 
     @Autowired
-    public UserEmailController(UserEmailService userEmailService, ObjectMapper objectMapper) {
+    public UserEmailController(UserEmailService userEmailService) {
         this.userEmailService = userEmailService;
-        this.objectMapper = objectMapper;
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "add extra email", httpMethod = "POST")
     public UserEmailBean addExtraEmail(Authentication authentication, @RequestBody String email) {
-        UserEmail userEmail = userEmailService.saveUserEmail(authentication.getName(), email);
-        return objectMapper.map(userEmail, UserEmailBean.class);
+        return userEmailService.saveUserEmail(authentication.getName(), email);
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.PUT)
+    @ApiOperation(value = "update extra email", httpMethod = "PUT")
+    public void updateExtraEmail(Authentication authentication, @RequestBody UserEmailBean userEmailBean) {
+        userEmailService.updateUserEmail(authentication.getName(), userEmailBean);
     }
 
     @RequestMapping(value = "", method = RequestMethod.DELETE)
