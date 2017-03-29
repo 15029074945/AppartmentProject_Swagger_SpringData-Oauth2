@@ -43,10 +43,10 @@ public class EmailService {
     public String createLink(String token) {
 
         // TODO: get domain with details
-        String remoteAddress = ((WebAuthenticationDetails)(SecurityContextHolder.getContext().getAuthentication().getDetails()))
-                .getRemoteAddress();
+        //String remoteAddress = ((WebAuthenticationDetails)(SecurityContextHolder.getContext().getAuthentication().getDetails()))
+        //        .getRemoteAddress();
         //return VERIFY + "https://" + remoteAddress + "/verify-email?access_token=" + token;
 
-        return VERIFY + "https://house-hunter.herokuapp.com/verify-email?access_token=" + token;
+        return VERIFY + "https://house-hunter.herokuapp.com/verify-email?token=" + token;
     }
 }

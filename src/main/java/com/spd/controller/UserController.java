@@ -69,9 +69,9 @@ public class UserController {
         userService.changePassword(authentication.getName(), password);
     }
 
-    @RequestMapping(value = "/verify", method = RequestMethod.POST)
+    @RequestMapping(value = "/verify/{token}", method = RequestMethod.POST)
     @ApiOperation(value = "verify user", httpMethod = "POST")
-    public void verificationUser(@PathVariable String token) {
+    public void verificationUser(@PathVariable("token") String token) {
         userService.verification(token);
     }
 
