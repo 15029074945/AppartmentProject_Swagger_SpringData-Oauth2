@@ -9,18 +9,20 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-//@EnableWebMvc
-//@ControllerAdvice(basePackages = "com/spd")
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+//@ControllerAdvice
+public class GlobalExceptionHandler implements HandlerExceptionResolver {
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorModelBean> handleError(Exception ex) {
@@ -54,12 +56,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
+    public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
+        return null;
+    }
+
+    /*@Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         Map<String,String> responseBody = new HashMap<>();
         responseBody.put("path",request.getContextPath());
         responseBody.put("message","111" + "The URL you have reached is not in service at this time (404).");
         return new ResponseEntity<>(responseBody, HttpStatus.NOT_FOUND);
-    }
+    }*/
 /*
     @ExceptionHandler(value = RuntimeException.class)
     public ResponseEntity<ErrorModelBean> handleError(RuntimeException ex) {
