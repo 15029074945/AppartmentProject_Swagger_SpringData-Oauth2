@@ -24,9 +24,9 @@ public class UserTelephoneController {
         this.userTelephoneService = userTelephoneService;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @RequestMapping(value = "/{telephone}", method = RequestMethod.POST)
     @ApiOperation(value = "add extra telephone", httpMethod = "POST")
-    public UserTelephoneBean addExtraTelephone(Authentication authentication, @RequestBody String telephone) {
+    public UserTelephoneBean addExtraTelephone(Authentication authentication, @PathVariable("telephone") String telephone) {
         return userTelephoneService.saveUserTelephone(authentication.getName(), telephone);
     }
 
@@ -36,9 +36,9 @@ public class UserTelephoneController {
         userTelephoneService.updateUserTelephone(authentication.getName(), userTelephoneBean);
     }
 
-    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete extra telephone", httpMethod = "DELETE")
-    public void deleteExtraTelephone(Authentication authentication, @RequestBody int id) {
+    public void deleteExtraTelephone(Authentication authentication, @PathVariable("id") int id) {
         userTelephoneService.deleteUserTelephone(authentication.getName(), id);
     }
 

@@ -63,15 +63,15 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/pass", method = RequestMethod.POST)
+    @RequestMapping(value = "/pass/{password}", method = RequestMethod.POST)
     @ApiOperation(value = "change password", httpMethod = "POST")
-    public void changePassword(Authentication authentication, @RequestBody String password) {
+    public void changePassword(Authentication authentication, @PathVariable("password") String password) {
         userService.changePassword(authentication.getName(), password);
     }
 
     @RequestMapping(value = "/verify", method = RequestMethod.POST)
     @ApiOperation(value = "verify user", httpMethod = "POST")
-    public void verificationUser(@RequestBody String token) {
+    public void verificationUser(@PathVariable String token) {
         userService.verification(token);
     }
 

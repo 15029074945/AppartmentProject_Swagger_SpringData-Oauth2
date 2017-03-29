@@ -24,9 +24,9 @@ public class UserEmailController {
         this.userEmailService = userEmailService;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @RequestMapping(value = "/{email}", method = RequestMethod.POST)
     @ApiOperation(value = "add extra email", httpMethod = "POST")
-    public UserEmailBean addExtraEmail(Authentication authentication, @RequestBody String email) {
+    public UserEmailBean addExtraEmail(Authentication authentication, @PathVariable("email") String email) {
         return userEmailService.saveUserEmail(authentication.getName(), email);
     }
 
@@ -36,9 +36,9 @@ public class UserEmailController {
         userEmailService.updateUserEmail(authentication.getName(), userEmailBean);
     }
 
-    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete extra email", httpMethod = "DELETE")
-    public void deleteExtraEmail(Authentication authentication, @RequestBody int id) {
+    public void deleteExtraEmail(Authentication authentication, @PathVariable("id") int id) {
         userEmailService.deleteUserEmail(authentication.getName(), id);
     }
 
