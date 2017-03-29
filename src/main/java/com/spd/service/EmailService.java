@@ -27,7 +27,7 @@ public class EmailService {
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(props.getProperty(EmailUtil.MAIL_SMTP_USERNAME + "@@@@@")));
+            message.setFrom(new InternetAddress(props.getProperty(EmailUtil.MAIL_SMTP_USERNAME)));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             message.setSubject(SUBJECT);
             message.setText(body);
