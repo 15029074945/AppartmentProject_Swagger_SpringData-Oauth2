@@ -5,6 +5,9 @@ import com.spd.repository.FacilityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class FacilityService {
 
@@ -17,5 +20,12 @@ public class FacilityService {
 
     public Facility getFacilityByTitle(String title) {
         return facilityRepository.findOneByTitle(title);
+    }
+
+    public List<String> getAllTitle() {
+        List<Facility> facilities = facilityRepository.findAll();
+        List<String> titles = new ArrayList<>();
+        facilities.forEach(facility -> titles.add(facility.getTitle()));
+        return titles;
     }
 }

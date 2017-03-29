@@ -17,7 +17,7 @@ public class AnnouncementFacility {
     @JoinColumn(name = "ANNOUNCEMENT_ID")
     private Announcement announcement;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) // (fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "FACILITY_ID")
     private Facility facility;
 

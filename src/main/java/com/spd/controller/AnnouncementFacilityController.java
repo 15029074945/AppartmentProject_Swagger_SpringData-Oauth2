@@ -1,20 +1,17 @@
 package com.spd.controller;
 
-import com.spd.bean.AnnouncementFacilityBean;
+import com.spd.bean.FacilityBean;
 import com.spd.service.AnnouncementFacilityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/announcement/facility")
+@RequestMapping("api/v1/announcements/{idAnnouncement}/facilities")
 @Api("announcement facility")
 public class AnnouncementFacilityController {
 
@@ -26,20 +23,24 @@ public class AnnouncementFacilityController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    @ApiOperation(value = "get announcement facility", httpMethod = "GET")
-    public List<AnnouncementFacilityBean> getFacility(Authentication authentication, @RequestBody int idAnnouncement) {
+    @ApiOperation(value = "get announcement facilities", httpMethod = "GET")
+    public List<FacilityBean> getFacilities(Authentication authentication, @PathVariable("idAnnouncement") int idAnnouncement) {
         return announcementFacilityService.getFacilities(authentication.getName(), idAnnouncement);
     }
 
+    // 1 delete all facilities dependency with this announcement
+    // 2 add all facilities with input
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create announcement facility", httpMethod = "POST")
-    public void createFacility(Authentication authentication, @RequestBody List<AnnouncementFacilityBean> announcementFacilityBeans) {
-        announcementFacilityService.createFacility(authentication.getName(), announcementFacilityBeans);
+    public void createFacility(Authentication authentication, @RequestBody List<FacilityBean> facilityBeans, @PathVariable("idAnnouncement") int idAnnouncement) {
+        announcementFacilityService.createFacility(authentication.getName(), facilityBeans, idAnnouncement);
     }
 
+    // 1 delete all facilities dependency with this announcement
+    // 2 add all facilities with input
     @RequestMapping(value = "", method = RequestMethod.PUT)
     @ApiOperation(value = "update announcement facility", httpMethod = "PUT")
-    public void updateFacility(Authentication authentication, @RequestBody List<AnnouncementFacilityBean> announcementFacilityBeans) {
-        announcementFacilityService.updateFacility(authentication.getName(), announcementFacilityBeans);
+    public void updateFacility(Authentication authentication, @RequestBody List<FacilityBean> facilityBeans, @PathVariable("idAnnouncement") int idAnnouncement) {
+        announcementFacilityService.updateFacility(authentication.getName(), facilityBeans, idAnnouncement);
     }
 }
