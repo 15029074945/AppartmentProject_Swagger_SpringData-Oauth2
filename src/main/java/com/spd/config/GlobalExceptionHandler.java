@@ -21,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-//@ControllerAdvice
-public class GlobalExceptionHandler implements HandlerExceptionResolver {
+@ControllerAdvice
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorModelBean> handleError(Exception ex) {
@@ -34,18 +34,18 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
     }
 
     @ExceptionHandler(value = LoginAuthenticationProvider.AuthenticationExceptionImpl.class)
-    public ResponseEntity<ErrorModelBean> handleAuthentication(Exception ex) {
+    public ResponseEntity<ErrorModelBean> handleAuthentication(Exception ex, WebRequest request) {
         ErrorModelBean errorModelBean = new ErrorModelBean("111" + ex.getMessage(),
                 HttpStatus.UNAUTHORIZED.value());
 
         return new ResponseEntity<>(errorModelBean, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(Exception.class)
+    /*@ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseEntity<Object> handleControllerException(HttpServletRequest req, Exception ex) {
         return new ResponseEntity<>("111", HttpStatus.CONFLICT);
-    }
+    }*/
 
     @ExceptionHandler(value = MessagingException.class)
     public ResponseEntity<ErrorModelBean> handleVerifyEmail(Exception ex) {
@@ -55,10 +55,10 @@ public class GlobalExceptionHandler implements HandlerExceptionResolver {
         return new ResponseEntity<>(errorModelBean, HttpStatus.BAD_REQUEST);
     }
 
-    @Override
+    /*@Override
     public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
         return null;
-    }
+    }*/
 
     /*@Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {

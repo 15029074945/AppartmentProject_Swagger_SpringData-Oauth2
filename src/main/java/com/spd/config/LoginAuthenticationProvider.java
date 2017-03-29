@@ -61,7 +61,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         }
     }
 
-    public class AuthenticationExceptionImpl extends AuthenticationException {
+    public class AuthenticationExceptionImpl extends RuntimeException {
 
         public AuthenticationExceptionImpl(String msg, Throwable t) {
             super(msg, t);
