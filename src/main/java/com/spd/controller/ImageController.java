@@ -34,13 +34,13 @@ public class ImageController {
     public ImageBean uploadImage(@RequestParam(value = "image") MultipartFile imageFile, HttpServletResponse response) throws IOException {
         String mimeType;
         FileValidator fileValidator = new FileValidator();
+
         try {
             MagicMatch match = Magic.getMagicMatch(imageFile.getBytes());
             mimeType = match.getMimeType();
         } catch (Exception e) {
             mimeType = "";
         }
-
         if (!fileValidator.validate(mimeType, imageFile)) {
             response.setStatus(SC_BAD_REQUEST);
             return null;
@@ -63,4 +63,8 @@ public class ImageController {
         response.getOutputStream().write(image.getData());
         response.getOutputStream().close();
     }
+       /*   if(!fileValidator.validateImageWidthHeight(imageFile)){
+            response.setStatus(SC_BAD_REQUEST);
+            return null;
+        }*/
 }

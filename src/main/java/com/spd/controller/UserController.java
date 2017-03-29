@@ -101,8 +101,8 @@ public class UserController {
 
     @RequestMapping(value = "/{id}/image", method = RequestMethod.PUT)
     @ApiOperation(value = "set image", httpMethod = "PUT")
-    public void setUserImage(@PathVariable("id") int id, @RequestBody ImageBean imageBean) {
-        userService.setImage(id, imageBean.getId());
+    public void setUserImage(Authentication authentication , @RequestBody ImageBean imageBean) {
+        userService.setImage(authentication.getName(), imageBean.getId());
     }
 
 }

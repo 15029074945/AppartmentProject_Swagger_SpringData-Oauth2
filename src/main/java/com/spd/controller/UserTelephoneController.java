@@ -1,14 +1,15 @@
 package com.spd.controller;
 
 import com.spd.bean.UserTelephoneBean;
-import com.spd.entity.UserTelephone;
-import com.spd.mapper.ObjectMapper;
 import com.spd.service.UserTelephoneService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
