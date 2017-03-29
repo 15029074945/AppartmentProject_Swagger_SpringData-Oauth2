@@ -33,6 +33,6 @@ public class AnnouncementImageController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete announcement picture", httpMethod = "DELETE")
     public void delete(@RequestBody AnnouncementImageBean announcementImageBean) {
-             /*announcementImageService.deleteAnnouncementImage(announcementImageBean.getId());*/
+             announcementImageService.deleteAnnouncementImage(announcementImageBean.getId());
     }
 }

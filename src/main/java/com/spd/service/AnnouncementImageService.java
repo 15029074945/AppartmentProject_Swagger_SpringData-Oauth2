@@ -5,6 +5,8 @@ import com.spd.entity.Image;
 import com.spd.repository.AnnoucementImageRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AnnouncementImageService {
     private final AnnoucementImageRepository annoucementImageRepository;
@@ -21,5 +23,16 @@ public class AnnouncementImageService {
         announcementImage.setAnnouncement(announcementService.getById(id).get());
         announcementImage.setActive(true);
         annoucementImageRepository.save(announcementImage);
+    }
+
+    public void deleteAnnouncementImage(int id) {
+
+        Optional<AnnouncementImage> announcementImage = Optional.ofNullable(annoucementImageRepository.getOne(id));
+
+        if (announcementImage.isPresent()) {
+            annoucementImageRepository.delete(id);
+        } else {
+            //TODO
+        }
     }
 }
