@@ -1,18 +1,15 @@
 package com.spd.controller;
 
+import com.spd.bean.AnnouncementImageBean;
 import com.spd.service.AnnouncementImageService;
 import com.spd.service.AnnouncementService;
 import com.spd.service.ImageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/announcements/images")
+@RequestMapping("api/v1/announcements/{id}/images")
 @Api(value = "announcement images")
 public class AnnouncementImageController {
 
@@ -26,16 +23,16 @@ public class AnnouncementImageController {
         this.announcementImageService = announcementImageService;
     }
 
-    @RequestMapping(value = "{id}/images/{imageId}", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create announcement image ", httpMethod = "POST")
-    public void saveAnnouncementImage(Authentication authentication, @RequestBody int imageId){
-
+    public void saveAnnouncementImage(@RequestBody AnnouncementImageBean announcementImageBean, @PathVariable int id){
+            announcementImageService.saveAnnoucementImage(imageService.getImage(announcementImageBean.getId()),
+                    announcementImageBean.getTitle(),id);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete announcement picture", httpMethod = "DELETE")
-    public void delete(@RequestBody int id) {
-             announcementImageService.deleteAnnouncementImage(id);
-
+    public void delete(@RequestBody AnnouncementImageBean announcementImageBean) {
+             /*announcementImageService.deleteAnnouncementImage(announcementImageBean.getId());*/
     }
 }
