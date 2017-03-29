@@ -41,11 +41,6 @@ public class ImageController {
         } catch (Exception e) {
             mimeType = "";
         }
-     /*   if(!fileValidator.validateImageWidthHeight(imageFile)){
-            response.setStatus(SC_BAD_REQUEST);
-            return null;
-        }*/
-
         if (!fileValidator.validate(mimeType, imageFile)) {
             response.setStatus(SC_BAD_REQUEST);
             return null;
@@ -68,4 +63,8 @@ public class ImageController {
         response.getOutputStream().write(image.getData());
         response.getOutputStream().close();
     }
+       /*   if(!fileValidator.validateImageWidthHeight(imageFile)){
+            response.setStatus(SC_BAD_REQUEST);
+            return null;
+        }*/
 }

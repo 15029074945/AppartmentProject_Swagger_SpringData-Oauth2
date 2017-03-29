@@ -114,11 +114,13 @@ public class UserService /*implements UserDetailsService*/ {
     }
 
 
-    public void setImage(int id, int imageId) {
-        User user = getById(id);
-        Image image = imageService.getImage(imageId);
-        user.setImage(image);
-        userRepository.save(user);
+    public void setImage(String email, int imageId) {
+         getByEmail(email)
+                 .ifPresent(user -> {
+                     Image image = imageService.getImage(imageId);
+                     user.setImage(image);
+                     userRepository.save(user);
+                 });
     }
 
     public void registration(User user) throws MessagingException {
