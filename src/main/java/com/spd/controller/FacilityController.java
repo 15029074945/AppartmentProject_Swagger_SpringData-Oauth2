@@ -1,7 +1,6 @@
 package com.spd.controller;
 
 import com.spd.bean.FacilityBean;
-import com.spd.mapper.ObjectMapper;
 import com.spd.service.FacilityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,18 +16,16 @@ import java.util.List;
 @Api(value = "facilities")
 public class FacilityController {
 
-    private final ObjectMapper objectMapper;
     private final FacilityService facilityService;
 
-    public FacilityController(ObjectMapper objectMapper, FacilityService facilityService) {
-        this.objectMapper = objectMapper;
+    public FacilityController(FacilityService facilityService) {
         this.facilityService = facilityService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "get announcement facilities", httpMethod = "GET")
     public List<FacilityBean> getFacilities(Authentication authentication) {
-        return facilityService.getAllTitleByEmailUser(authentication.getName());
+        return facilityService.getAllTitle(authentication.getName());
     }
 
 }
