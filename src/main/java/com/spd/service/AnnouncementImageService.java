@@ -2,18 +2,18 @@ package com.spd.service;
 
 import com.spd.entity.AnnouncementImage;
 import com.spd.entity.Image;
-import com.spd.repository.AnnoucementImageRepository;
+import com.spd.repository.AnnouncementImageRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 public class AnnouncementImageService {
-    private final AnnoucementImageRepository annoucementImageRepository;
+    private final AnnouncementImageRepository announcementImageRepository;
     private final AnnouncementService announcementService;
 
-    public AnnouncementImageService(AnnoucementImageRepository annoucementImageRepository, AnnouncementService announcementService) {
-        this.annoucementImageRepository = annoucementImageRepository;
+    public AnnouncementImageService(AnnouncementImageRepository announcementImageRepository, AnnouncementService announcementService) {
+        this.announcementImageRepository = announcementImageRepository;
         this.announcementService = announcementService;
     }
     public void saveAnnoucementImage(Image image, String title, Integer id) {
@@ -22,15 +22,15 @@ public class AnnouncementImageService {
         announcementImage.setTitle(title);
         announcementImage.setAnnouncement(announcementService.getById(id).get());
         announcementImage.setActive(true);
-        annoucementImageRepository.save(announcementImage);
+        announcementImageRepository.save(announcementImage);
     }
 
     public void deleteAnnouncementImage(int id) {
 
-        Optional<AnnouncementImage> announcementImage = Optional.ofNullable(annoucementImageRepository.getOne(id));
+        Optional<AnnouncementImage> announcementImage = Optional.ofNullable(announcementImageRepository.getOne(id));
 
         if (announcementImage.isPresent()) {
-            annoucementImageRepository.delete(id);
+            announcementImageRepository.delete(id);
         } else {
             //TODO
         }
