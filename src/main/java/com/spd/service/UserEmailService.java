@@ -28,20 +28,21 @@ public class UserEmailService {
     }
 
     public UserEmailBean saveUserEmail(String email, String extraEmail) {
-        Optional<User> userOptional = userService.getByEmail(email);
-        if (userOptional.isPresent()) {
-            int userId = userOptional.get().getId();
-            Optional<UserEmail> userEmailOptional = userEmailRepository.findByUserIdAndEmail(userId, extraEmail);
-            if (!userEmailOptional.isPresent()) {
-                UserEmail userEmail = createUserEmail(userId, extraEmail);
-                return objectMapper.map(userEmail, UserEmailBean.class);
-            }
+        User user = userService.getByEmail(email);
+
+        int userId = user.getId();
+        Optional<UserEmail> userEmailOptional = userEmailRepository.findByUserIdAndEmail(userId, extraEmail);
+        if (!userEmailOptional.isPresent()) {
+            UserEmail userEmail = createUserEmail(user, extraEmail);
+            return objectMapper.map(userEmail, UserEmailBean.class);
         }
-        return new UserEmailBean();
+        else {
+            // TODO
+            return new UserEmailBean();
+        }
     }
 
-    private UserEmail createUserEmail(int userId, String email) {
-        User user = userService.getById(userId);
+    private UserEmail createUserEmail(User user, String email) {
         UserEmail userEmail = new UserEmail();
         userEmail.setEmail(email);
         userEmail.setUser(user);
@@ -62,14 +63,10 @@ public class UserEmailService {
     }
 
     public List<UserEmailBean> getListByUserEmail(String email) {
-        Optional<User> userOptional = userService.getByEmail(email);
-        if (userOptional.isPresent()) {
-            List<UserEmail> userEmails = userEmailRepository.findByUserId(userOptional.get().getId());
-            return objectMapper.mapAsList(userEmails, UserEmailBean.class);
-        }
-        else {
-            return new ArrayList<>();
-        }
+        User user = userService.getByEmail(email);
+
+        List<UserEmail> userEmails = userEmailRepository.findByUserId(user.getId());
+        return objectMapper.mapAsList(userEmails, UserEmailBean.class);
     }
 
     public UserEmail getUserEmail(String email) {
@@ -81,10 +78,10 @@ public class UserEmailService {
     }
 
     public void updateUserEmail(String email, UserEmailBean userEmailBean) {
-        Optional<User> userOptional = userService.getByEmail(email);
+        User user = userService.getByEmail(email);
         Optional<UserEmail> userEmailOptional = userEmailRepository.findOneById(userEmailBean.getId());
-        if (userOptional.isPresent() && userEmailOptional.isPresent() &&
-                userOptional.get().getId().equals(userEmailOptional.get().getUser().getId())) {
+        if (userEmailOptional.isPresent() &&
+                user.getId().equals(userEmailOptional.get().getUser().getId())) {
             UserEmail userEmail = userEmailOptional.get();
             userEmail.setEmail(userEmailBean.getEmail());
             userEmailRepository.save(userEmail);

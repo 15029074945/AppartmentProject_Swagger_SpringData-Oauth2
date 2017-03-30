@@ -4,6 +4,7 @@ import com.spd.bean.ImageBean;
 import com.spd.bean.UserInformationBean;
 import com.spd.bean.UserRegistrationBean;
 import com.spd.entity.User;
+import com.spd.exception.AuthenticationUserException;
 import com.spd.exception.ValidationException;
 import com.spd.mapper.ObjectMapper;
 import com.spd.service.UserService;
@@ -41,8 +42,7 @@ public class UserController {
     public ResponseEntity<String> createUser(Authentication authentication, @RequestBody UserRegistrationBean userRegistrationBean) {
         Optional<Authentication> authenticationOptional = Optional.ofNullable(authentication);
         if (authenticationOptional.isPresent()) {
-            // TODO
-            return new ResponseEntity<>("Can not create a new user", HttpStatus.BAD_REQUEST);
+            throw new AuthenticationUserException("User is creates");
         }
         else {
             ValidationException
@@ -87,10 +87,8 @@ public class UserController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "get user", httpMethod = "GET")
     public UserInformationBean getUser(Authentication authentication) {
-        return userService
-                .getByEmail(authentication.getName())
-                .map(user -> objectMapper.map(user, UserInformationBean.class))
-                .orElse(new UserInformationBean());
+        User user = userService.getByEmail(authentication.getName());
+        return objectMapper.map(user, UserInformationBean.class);
     }
 
     @RequestMapping(value = "", method = RequestMethod.DELETE)
