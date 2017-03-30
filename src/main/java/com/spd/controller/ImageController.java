@@ -42,7 +42,7 @@ public class ImageController {
             mimeType = "";
         }
 
-        if ((!fileValidator.validate(mimeType, imageFile))) {
+        if ((!fileValidator.validate(mimeType, imageFile)) || (!fileValidator.validateImageWidthHeight(imageFile))) {
             response.setStatus(SC_BAD_REQUEST);
             //throw new ImageException();
             return null;
