@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 public class AddressBean {
 
-    private Integer idAnnouncement;
     private String country;
     private String city;
     private String region;
@@ -12,14 +11,6 @@ public class AddressBean {
     private String Appartment;
     private BigDecimal latitude;
     private BigDecimal longitude;
-
-    public Integer getIdAnnouncement() {
-        return idAnnouncement;
-    }
-
-    public void setIdAnnouncement(Integer idAnnouncement) {
-        this.idAnnouncement = idAnnouncement;
-    }
 
     public String getCountry() {
         return country;
