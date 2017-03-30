@@ -41,6 +41,7 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                         "/v2/api-docs**",
                         "/webjars/**",
                         "/images/*.*",
+                        "/api/v1/images",
                         "/api/v1/users/verify/**",
                         "/api/v1/users/verify/*",
                         "/api/v1/users/verify/")
