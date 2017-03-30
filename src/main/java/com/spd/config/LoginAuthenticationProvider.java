@@ -30,7 +30,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
         String authenticationPassword = authentication.getCredentials().toString();
         String userEmail = null;
         String userPassword = null;
-        Optional<User> userOptional = userService.getByEmail(authenticationEmail);
+        Optional<User> userOptional = userService.getUserOptionalByEmail(authenticationEmail);
         User user = null;
         Boolean status = null;
         if (userOptional.isPresent()) {
