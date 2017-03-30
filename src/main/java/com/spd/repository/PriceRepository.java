@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface PriceRepository extends JpaRepository<Price,Integer> {
 
-    List<Price> findByAnnouncementId(int idAnnouncement);
+    List<Price> findByAnnouncementIdAndActiveTrue(int idAnnouncement);
 
 }

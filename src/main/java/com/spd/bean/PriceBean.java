@@ -4,17 +4,8 @@ import java.math.BigDecimal;
 
 public class PriceBean {
 
-    private Integer idAnnouncement;
-    private BigDecimal price;
     private String type;
-
-    public Integer getIdAnnouncement() {
-        return idAnnouncement;
-    }
-
-    public void setIdAnnouncement(Integer idAnnouncement) {
-        this.idAnnouncement = idAnnouncement;
-    }
+    private BigDecimal price;
 
     public BigDecimal getPrice() {
         return price;
