@@ -33,7 +33,6 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                 .antMatchers("/**/*.js",
                         "/login",
                         "/**/*.js",
-                        "/api/v1/users",
                         "/swagger*",
                         "/swagger-resources/**",
                         "/api-docs",
@@ -41,10 +40,16 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                         "/v2/api-docs**",
                         "/webjars/**",
                         "/images/*.*",
-                        "/api/v1/images",
                         "/api/v1/users/verify/**",
                         "/api/v1/users/verify/*",
-                        "/api/v1/users/verify/")
+                        "/api/v1/users/verify/",
+                        "/api/v1/messages",
+                        "/api/v1/facilities",
+                        "/api/v1/conversations",
+                        "/api/v1/images",
+                        "/api/v1/announcements",
+                        "/api/v1/announcements/**",
+                        "/api/v1/users")
                             .permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**")
                     .permitAll()
