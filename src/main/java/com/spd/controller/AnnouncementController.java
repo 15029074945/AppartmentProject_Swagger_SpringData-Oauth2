@@ -1,8 +1,7 @@
 package com.spd.controller;
 
 import com.spd.bean.AnnouncementBean;
-import com.spd.entity.Announcement;
-import com.spd.mapper.ObjectMapper;
+import com.spd.bean.AnnouncementIdentifiedBean;
 import com.spd.service.AnnouncementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,35 +25,31 @@ public class AnnouncementController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "get announcements list", httpMethod = "GET")
-    public List<AnnouncementBean> getAnnouncements(Authentication authentication) {
+    public List<AnnouncementIdentifiedBean> getAnnouncements(Authentication authentication) {
         return announcementService.getAnnouncementsByUserEmail(authentication.getName());
     }
 
-    @RequestMapping(value = "/id", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "get announcement", httpMethod = "GET")
-    public AnnouncementBean getAnnouncement(Authentication authentication, @RequestParam int id) {
+    public AnnouncementIdentifiedBean getAnnouncement(Authentication authentication, @PathVariable("id") int id) {
         return announcementService.getAnnouncementById(authentication.getName(), id);
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create announcement", httpMethod = "POST")
-    public AnnouncementBean create(Authentication authentication, @RequestBody AnnouncementBean announcementBean) {
-        return createOrUpdateAnnouncement(authentication, announcementBean);
+    public AnnouncementIdentifiedBean create(Authentication authentication, @RequestBody AnnouncementBean announcementBean) {
+        return announcementService.createAnnouncement(authentication.getName(), announcementBean);
     }
 
     @RequestMapping(value = "", method = RequestMethod.PUT)
     @ApiOperation(value = "update announcement", httpMethod = "PUT")
-    public AnnouncementBean update(Authentication authentication, @RequestBody AnnouncementBean announcementBean) {
-        return createOrUpdateAnnouncement(authentication, announcementBean);
+    public void update(Authentication authentication, @RequestBody AnnouncementIdentifiedBean announcementIdentifiedBean) {
+        announcementService.updateAnnouncement(authentication.getName(), announcementIdentifiedBean);
     }
 
-    private AnnouncementBean createOrUpdateAnnouncement(Authentication authentication, @RequestBody AnnouncementBean announcementBean) {
-        return announcementService.saveAnnouncement(authentication.getName(), announcementBean);
-    }
-
-    @RequestMapping(value = "/", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete announcement", httpMethod = "DELETE")
-    public void delete(Authentication authentication, @RequestBody int id) {
+    public void delete(Authentication authentication, @PathVariable("id") int id) {
         announcementService.deleteAnnouncement(authentication.getName(), id);
     }
 

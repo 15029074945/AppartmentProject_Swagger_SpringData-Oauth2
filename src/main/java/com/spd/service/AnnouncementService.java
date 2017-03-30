@@ -1,17 +1,16 @@
 package com.spd.service;
 
 import com.spd.bean.AnnouncementBean;
+import com.spd.bean.AnnouncementIdentifiedBean;
 import com.spd.entity.Announcement;
 import com.spd.entity.User;
-import com.spd.exception.AnnouncementException;
+import com.spd.exception.NoSuchAnnouncementException;
 import com.spd.mapper.ObjectMapper;
 import com.spd.repository.AnnouncementRepository;
-import com.spd.util.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AnnouncementService {
@@ -27,54 +26,62 @@ public class AnnouncementService {
         this.userService = userService;
     }
 
-    public void deleteAnnouncement(String email, int id) {
-        Announcement announcement = announcementRepository.findOne(id);
-        if (announcement.getUser().getEmail().equals(email)) {
-            announcementRepository.delete(id);
-        }
-        else {
-            // TODO
-        }
+    public List<AnnouncementIdentifiedBean> getAnnouncementsByUserEmail(String email) {
+        User user = userService.getByEmail(email);
+        List<Announcement> announcements = announcementRepository.findByUserIdAndActiveTrue(user.getId());
+        return objectMapper.mapAsList(announcements, AnnouncementIdentifiedBean.class);
     }
 
-    public AnnouncementBean saveAnnouncement(String email, AnnouncementBean announcementBean) {
+    public AnnouncementIdentifiedBean getAnnouncementById(String email, int id) {
+        User user = userService.getByEmail(email);
+
+        Announcement announcement = getByIdAndUserId(id, user.getId());
+
+        return objectMapper.map(announcement, AnnouncementIdentifiedBean.class);
+    }
+
+    public Announcement getById(int id) {
+        return announcementRepository.findOneById(id)
+                .orElseThrow(() -> new NoSuchAnnouncementException("Not such announcement"));
+    }
+
+    public AnnouncementIdentifiedBean createAnnouncement(String email, AnnouncementBean announcementBean) {
+        User user = userService.getByEmail(email);
+
         Announcement announcement = objectMapper.map(announcementBean, Announcement.class);
+        announcement.setActive(true);
+        announcement.setUser(user);
+        Announcement newAnnouncement = announcementRepository.save(announcement);
 
-        Optional<User> userOptional = userService.getByEmail(email);
-        if (userOptional.isPresent()) {
-            announcement.setUser(userOptional.get());
-            Announcement newAnnouncement = announcementRepository.save(announcement);
-            return objectMapper.map(newAnnouncement, AnnouncementBean.class);
-        }
-        else {
-            // TODO
-            return new AnnouncementBean();
-        }
-    }
-
-    public Optional<Announcement> getById(Integer id) {
-        return announcementRepository.findOneById(id);
+        return objectMapper.map(newAnnouncement, AnnouncementIdentifiedBean.class);
     }
 
     public void saveAnnouncement(Announcement announcement) {
         announcementRepository.save(announcement);
     }
 
-    public List<AnnouncementBean> getAnnouncementsByUserEmail(String email) {
-        Optional<User> userOptional = userService.getByEmail(email);
-        List<Announcement> announcements = announcementRepository.findByUserId(userOptional.get().getId());
-        return objectMapper.mapAsList(announcements, AnnouncementBean.class);
+    public void updateAnnouncement(String email, AnnouncementIdentifiedBean announcementIdentifiedBean) {
+        User user = userService.getByEmail(email);
+
+        Announcement announcement = objectMapper.map(announcementIdentifiedBean, Announcement.class);
+        announcement.setActive(true);
+        announcement.setUser(user);
+        announcementRepository.save(announcement);
     }
 
-    public AnnouncementBean getAnnouncementById(String email, int id) {
-        Optional<User> userOptional = userService.getByEmail(email);
-        Optional<Announcement> announcementOptional = announcementRepository.findOneById(id);
-        if (ServiceUtil.isAuthenticationUserAnnouncement(userOptional, announcementOptional)) {
-            return objectMapper.map(announcementOptional.get(), AnnouncementBean.class);
-        }
-        else {
-            // TODO
-            throw new AnnouncementException("User does not have such an announcement");
-        }
+    public void deleteAnnouncement(String email, int id) {
+        User user = userService.getByEmail(email);
+
+        Announcement announcement = getByIdAndUserId(id, user.getId());
+
+        announcement.setActive(false);
+
+        announcementRepository.save(announcement);
     }
+
+    public Announcement getByIdAndUserId(int id, int idUser) {
+        return announcementRepository.findOneByIdAndUserId(id, idUser)
+                .orElseThrow(() -> new NoSuchAnnouncementException("User does not have such an announcement"));
+    }
+
 }

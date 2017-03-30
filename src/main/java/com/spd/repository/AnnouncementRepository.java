@@ -14,4 +14,8 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Inte
 
     List<Announcement> findByUserId(Integer id);
 
+    List<Announcement> findByUserIdAndActiveTrue(Integer id);
+
+    Optional<Announcement> findOneByIdAndUserId(Integer id, Integer userId);
+
 }
