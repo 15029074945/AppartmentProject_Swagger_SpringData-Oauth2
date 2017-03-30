@@ -1,12 +1,21 @@
 package com.spd.bean;
 
-public class AnnouncementBean {
+public class AnnouncementIdentifiedBean {
 
+    private Integer id;
     private Boolean hidden;
     private Integer room;
     private Integer livingPlaces;
     private String title;
     private String shortDescription;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Boolean getHidden() {
         return hidden;
