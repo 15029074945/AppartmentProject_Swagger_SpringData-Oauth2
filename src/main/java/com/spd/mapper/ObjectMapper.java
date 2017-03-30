@@ -18,10 +18,10 @@ public class ObjectMapper extends ConfigurableMapper {
                 .field("userTelephones{telephone}", "extraTelephones{}")
                 .byDefault()
                 .register();*/
-        mapperFactory.classMap(Address.class, AddressBean.class)
+        /*mapperFactory.classMap(Address.class, AddressBean.class)
                 .field("id", "idAnnouncement")
                 .byDefault()
-                .register();
+                .register();*/
     }
 
 }
