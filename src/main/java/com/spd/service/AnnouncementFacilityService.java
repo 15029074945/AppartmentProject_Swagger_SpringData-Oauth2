@@ -13,9 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static com.spd.util.ServiceUtil.isAuthenticationUserAnnouncement;
 
 @Service
 public class AnnouncementFacilityService {
@@ -36,48 +33,66 @@ public class AnnouncementFacilityService {
     }
 
     public List<FacilityBean> getFacilities(String email, int idAnnouncement) {
-        Optional<User> userOptional = userService.getByEmail(email);
-        Optional<Announcement> announcementOptional = announcementService.getById(idAnnouncement);
-        if (isAuthenticationUserAnnouncement(userOptional, announcementOptional)) {
-            List<AnnouncementFacility> announcementFacilities = announcementFacilityRepository.findByAnnouncementId(idAnnouncement);
-            List<FacilityBean> facilityBeans = new ArrayList<>();
-            announcementFacilities
-                    .forEach(af -> facilityBeans.add(new FacilityBean(af.getFacility().getTitle())));
-            return facilityBeans;
-        }
-        else {
-            // TODO
-            return new ArrayList<>();
-        }
+        User user = userService.getByEmail(email);
+        Announcement announcement = announcementService.getByIdAndUserId(idAnnouncement, user.getId());
+
+        List<AnnouncementFacility> announcementFacilities =
+                announcementFacilityRepository.findByAnnouncementId(announcement.getId());
+
+        List<FacilityBean> facilityBeans = new ArrayList<>();
+        announcementFacilities
+                .forEach(af -> {
+                    String title = af.getFacility().getTitle();
+                    FacilityBean facilityBean = new FacilityBean();
+                    facilityBean.setTitle(title);
+                    facilityBeans.add(facilityBean);
+                });
+
+        return facilityBeans;
     }
 
     @Transactional
     public void createFacility(String email, List<FacilityBean> facilityBeans, int idAnnouncement) {
-        Optional<User> userOptional = userService.getByEmail(email);
-        Optional<Announcement> announcementOptional = announcementService.getById(idAnnouncement);
-        if (isAuthenticationUserAnnouncement(userOptional, announcementOptional)) {
+        User user = userService.getByEmail(email);
+        Announcement announcement = announcementService.getByIdAndUserId(idAnnouncement, user.getId());
 
-            List<AnnouncementFacility> announcementFacilitiesOld = announcementFacilityRepository.findByAnnouncementId(idAnnouncement);
-            announcementFacilityRepository.delete(announcementFacilitiesOld);
+        deleteAllAnnouncementFacilityByIdAnnouncement(idAnnouncement);
 
-            List<Facility> facilities =
-                    objectMapper.mapAsList(facilityBeans, Facility.class);
-            List<AnnouncementFacility> announcementFacilitiesNew = new ArrayList<>();
-            facilities.forEach(f -> {
-                AnnouncementFacility af = new AnnouncementFacility();
-                af.setEnabled(true);
-                int idFacility = facilityService.getFacilityByTitle(f.getTitle()).getId();
-                f.setId(idFacility);
-                af.setFacility(f);
-                Announcement announcement = announcementOptional.get();
-                af.setAnnouncement(announcement);
-                announcementFacilitiesNew.add(af);
-            });
-            announcementFacilityRepository.save(announcementFacilitiesNew);
-        }
+        addAllAnnouncementFacilityToAnnouncement(facilityBeans, announcement);
+    }
+
+    private void deleteAllAnnouncementFacilityByIdAnnouncement(int idAnnouncement) {
+        List<AnnouncementFacility> announcementFacilitiesOld = announcementFacilityRepository.findByAnnouncementId(idAnnouncement);
+        announcementFacilityRepository.delete(announcementFacilitiesOld);
+    }
+
+    private void addAllAnnouncementFacilityToAnnouncement(List<FacilityBean> facilityBeans, Announcement announcement) {
+        List<Facility> facilities = objectMapper.mapAsList(facilityBeans, Facility.class);
+
+        List<AnnouncementFacility> announcementFacilitiesNew = new ArrayList<>();
+
+        facilities.forEach(f -> {
+            AnnouncementFacility announcementFacility = new AnnouncementFacility();
+            announcementFacility.setEnabled(true);
+            String title = f.getTitle();
+            Facility facilityByTitle = facilityService.getFacilityByTitle(title);
+            int idFacility = facilityByTitle.getId();
+            f.setId(idFacility);
+            announcementFacility.setFacility(f);
+            announcementFacility.setAnnouncement(announcement);
+            announcementFacilitiesNew.add(announcementFacility);
+        });
+        announcementFacilityRepository.save(announcementFacilitiesNew);
     }
 
     public void updateFacility(String email, List<FacilityBean> facilityBeans, int idAnnouncement) {
         createFacility(email, facilityBeans, idAnnouncement);
+    }
+
+    public void deleteFacility(String email, int idAnnouncement) {
+        User user = userService.getByEmail(email);
+        Announcement announcement = announcementService.getByIdAndUserId(idAnnouncement, user.getId());
+
+        deleteAllAnnouncementFacilityByIdAnnouncement(announcement.getId());
     }
 }

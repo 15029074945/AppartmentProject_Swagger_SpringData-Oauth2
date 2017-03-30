@@ -28,19 +28,21 @@ public class AnnouncementFacilityController {
         return announcementFacilityService.getFacilities(authentication.getName(), idAnnouncement);
     }
 
-    // 1 delete all facilities dependency with this announcement
-    // 2 add all facilities with input
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create announcement facility", httpMethod = "POST")
     public void createFacility(Authentication authentication, @RequestBody List<FacilityBean> facilityBeans, @PathVariable("idAnnouncement") int idAnnouncement) {
         announcementFacilityService.createFacility(authentication.getName(), facilityBeans, idAnnouncement);
     }
 
-    // 1 delete all facilities dependency with this announcement
-    // 2 add all facilities with input
     @RequestMapping(value = "", method = RequestMethod.PUT)
     @ApiOperation(value = "update announcement facility", httpMethod = "PUT")
     public void updateFacility(Authentication authentication, @RequestBody List<FacilityBean> facilityBeans, @PathVariable("idAnnouncement") int idAnnouncement) {
         announcementFacilityService.updateFacility(authentication.getName(), facilityBeans, idAnnouncement);
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    @ApiOperation(value = "delete announcement facility", httpMethod = "DELETE")
+    public void deleteFacility(Authentication authentication, @PathVariable("idAnnouncement") int idAnnouncement) {
+        announcementFacilityService.deleteFacility(authentication.getName(), idAnnouncement);
     }
 }
