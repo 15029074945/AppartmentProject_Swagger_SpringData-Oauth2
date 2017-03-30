@@ -20,7 +20,7 @@ public class AnnouncementImageService {
         AnnouncementImage announcementImage = new AnnouncementImage();
         announcementImage.setImage(image);
         announcementImage.setTitle(title);
-        announcementImage.setAnnouncement(announcementService.getById(id).get());
+        announcementImage.setAnnouncement(announcementService.getById(id));
         announcementImage.setActive(true);
         announcementImageRepository.save(announcementImage);
     }

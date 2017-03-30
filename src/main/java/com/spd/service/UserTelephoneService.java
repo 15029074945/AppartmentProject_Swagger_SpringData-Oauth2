@@ -27,14 +27,12 @@ public class UserTelephoneService {
     }
 
     public UserTelephoneBean saveUserTelephone(String userEmail, String extraTelephone) {
-        Optional<User> userOptional = userService.getByEmail(userEmail);
-        if (userOptional.isPresent()) {
-            int userId = userOptional.get().getId();
-            Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findByUserIdAndTelephone(userId, extraTelephone);
-            if (!userEmailOptional.isPresent()) {
-                UserTelephone userTelephone = createUserTelephone(userId, extraTelephone);
-                return objectMapper.map(userTelephone, UserTelephoneBean.class);
-            }
+        User user = userService.getByEmail(userEmail);
+        int userId = user.getId();
+        Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findByUserIdAndTelephone(userId, extraTelephone);
+        if (!userEmailOptional.isPresent()) {
+            UserTelephone userTelephone = createUserTelephone(userId, extraTelephone);
+            return objectMapper.map(userTelephone, UserTelephoneBean.class);
         }
         return new UserTelephoneBean();
     }
@@ -61,21 +59,17 @@ public class UserTelephoneService {
     }
 
     public List<UserTelephoneBean> getListByEmail(String email) {
-        Optional<User> userOptional = userService.getByEmail(email);
-        if (userOptional.isPresent()) {
-            List<UserTelephone> userEmails = userTelephoneRepository.findByUserId(userOptional.get().getId());
-            return objectMapper.mapAsList(userEmails, UserTelephoneBean.class);
-        }
-        else {
-            return new ArrayList<>();
-        }
+        User user = userService.getByEmail(email);
+
+        List<UserTelephone> userEmails = userTelephoneRepository.findByUserId(user.getId());
+        return objectMapper.mapAsList(userEmails, UserTelephoneBean.class);
     }
 
     public void updateUserTelephone(String email, UserTelephoneBean userTelephoneBean) {
-        Optional<User> userOptional = userService.getByEmail(email);
+        User user = userService.getByEmail(email);
         Optional<UserTelephone> userTelephoneOptional = userTelephoneRepository.findOneById(userTelephoneBean.getId());
-        if (userOptional.isPresent() && userTelephoneOptional.isPresent() &&
-                userOptional.get().getId().equals(userTelephoneOptional.get().getUser().getId())) {
+        if (userTelephoneOptional.isPresent() &&
+                user.getId().equals(userTelephoneOptional.get().getUser().getId())) {
             UserTelephone userTelephone = userTelephoneOptional.get();
             userTelephone.setTelephone(userTelephoneBean.getTelephone());
             userTelephoneRepository.save(userTelephone);
@@ -83,7 +77,7 @@ public class UserTelephoneService {
     }
 
     /*public UserTelephone getUserTelephone(String extraTelephone) {
-        Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findOneByEmail(email);
+        Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findOneByEmailAndActiveTrue(email);
         if (userEmailOptional.isPresent()) {
             return userEmailOptional.get();
         }

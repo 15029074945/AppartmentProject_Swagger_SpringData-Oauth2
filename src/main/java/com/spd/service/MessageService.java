@@ -26,26 +26,22 @@ public class MessageService {
 
     public void sendMessage(String email, MessageBean messageBean) {
         int idAnnouncement = messageBean.getIdAnnouncement();
-        Optional<Announcement> announcementOptional = announcementService.getById(idAnnouncement);
-        Optional<Conversation> conversationOptional = conversationService.getAnnouncementByAnnouncementId(idAnnouncement);
-        Optional<User> userOptional = userService.getByEmail(email);
-        User userByEmail = userOptional.get();
-        User userByAnnouncement = announcementService.getById(idAnnouncement).get().getUser();
-        if (userByEmail.getEmail().equals(userByAnnouncement.getEmail())) {
-            // TODO
-        }
-        if (conversationOptional.isPresent()) {
+        Announcement announcement = announcementService.getById(idAnnouncement);
+        Optional<Conversation> conversation = conversationService.getAnnouncementByAnnouncementId(idAnnouncement);
+        User userByEmail = userService.getByEmail(email);
+        User userByAnnouncement = announcementService.getById(idAnnouncement).getUser();
+        if (conversation.isPresent()) {
             // TODO
         }
         else {
             Conversation conv = new Conversation();
-            conv.setAnnouncement(announcementOptional.get());
-            Conversation conversation = conversationService.saveConversation(conv);
+            conv.setAnnouncement(announcement);
+            Conversation conversationNew = conversationService.saveConversation(conv);
             Attender attender = new Attender();
             attender.setUser(userByAnnouncement);
             List<Attender> attenders = new ArrayList<>();
             attenders.add(attender);
-            conversation.setAttenders(attenders);
+            conversationNew.setAttenders(attenders);
             Message message = new Message();
             message.setText(messageBean.getText());
             message.setReceived(false);
