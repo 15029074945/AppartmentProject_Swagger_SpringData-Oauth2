@@ -22,12 +22,6 @@ public class FileValidator {
 
     public boolean validate(String mimeType, MultipartFile imageFile) {
 
-        System.out.println(imageFile.getSize() + " " + imageFile.getName());
-        try {
-            System.out.println(imageFile.getBytes() + " " + imageFile.getName());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         Boolean isSizeValid = imageFile.getSize() < MAX_ALLOWED_FILE_SIZE;
 
         Boolean isMimeTypeValid = Arrays.asList(allowedMimeTypes).contains(mimeType);

@@ -67,4 +67,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorModelBean, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = ImageException.class)
+    public ResponseEntity<ErrorModelBean> handleErrorFileFormat(ImageException ex) {
+
+        ErrorModelBean errorModelBean = new ErrorModelBean("Image should have jpeg,png or gif file extension." +
+                "Not more then 2МБ. Min image resolution: 800X600 .Max image resolution: 2048X1536  "+ ex.getMessage());
+
+        return new ResponseEntity<>(errorModelBean, HttpStatus.BAD_REQUEST);
+    }
+
 }
