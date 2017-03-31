@@ -3,6 +3,8 @@ package com.spd.service;
 import com.spd.bean.UserEmailBean;
 import com.spd.entity.User;
 import com.spd.entity.UserEmail;
+import com.spd.exception.AlreadyHaveUserEmail;
+import com.spd.exception.NoSuchUserEmailException;
 import com.spd.mapper.ObjectMapper;
 import com.spd.repository.UserEmailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +32,13 @@ public class UserEmailService {
     public UserEmailBean saveUserEmail(String email, String extraEmail) {
         User user = userService.getByEmail(email);
 
-        int userId = user.getId();
-        Optional<UserEmail> userEmailOptional = userEmailRepository.findByUserIdAndEmail(userId, extraEmail);
-        if (!userEmailOptional.isPresent()) {
-            UserEmail userEmail = createUserEmail(user, extraEmail);
-            return objectMapper.map(userEmail, UserEmailBean.class);
+        Optional<UserEmail> userEmailOptional = userEmailRepository.findByUserIdAndEmail(user.getId(), extraEmail);
+        if (userEmailOptional.isPresent()) {
+            throw new AlreadyHaveUserEmail("Already have this extra email");
         }
         else {
-            // TODO
-            return new UserEmailBean();
+            UserEmail userEmail = createUserEmail(user, extraEmail);
+            return objectMapper.map(userEmail, UserEmailBean.class);
         }
     }
 
@@ -50,41 +50,29 @@ public class UserEmailService {
     }
 
     public void deleteUserEmail(String email, int id) {
-        Optional<UserEmail> userEmailOptional = userEmailRepository
-                .findOneById(id);
-        userEmailOptional.ifPresent(userEmail -> {
-            if (userEmail.getUser().getEmail().equals(email)) {
-                userEmailRepository.delete(id);
-            }
-            else {
-                // TODO
-            }
-        });
+        User ignore = userService.getByEmail(email);
+        Optional<UserEmail> userEmailOptional = userEmailRepository.findOneById(id);
+        userEmailOptional.map(userEmail -> {
+            userEmailRepository.delete(id);
+            return Optional.of(userEmail);
+        })
+        .orElseThrow(() -> new NoSuchUserEmailException("No such user email"));
     }
 
     public List<UserEmailBean> getListByUserEmail(String email) {
         User user = userService.getByEmail(email);
-
         List<UserEmail> userEmails = userEmailRepository.findByUserId(user.getId());
         return objectMapper.mapAsList(userEmails, UserEmailBean.class);
     }
 
-    public UserEmail getUserEmail(String email) {
-        Optional<UserEmail> userEmailOptional = userEmailRepository.findOneByEmail(email);
-        if (userEmailOptional.isPresent()) {
-            return userEmailOptional.get();
-        }
-        throw new NullPointerException("Not found user with email");
-    }
-
     public void updateUserEmail(String email, UserEmailBean userEmailBean) {
-        User user = userService.getByEmail(email);
+        User ignore = userService.getByEmail(email);
         Optional<UserEmail> userEmailOptional = userEmailRepository.findOneById(userEmailBean.getId());
-        if (userEmailOptional.isPresent() &&
-                user.getId().equals(userEmailOptional.get().getUser().getId())) {
-            UserEmail userEmail = userEmailOptional.get();
+        userEmailOptional.flatMap(userEmail -> {
             userEmail.setEmail(userEmailBean.getEmail());
             userEmailRepository.save(userEmail);
-        }
+            return Optional.of(userEmail);
+        })
+        .orElseThrow(() -> new NoSuchUserEmailException("No such user email"));
     }
 }
