@@ -2,6 +2,7 @@ package com.spd.controller;
 
 import com.spd.bean.ImageBean;
 import com.spd.entity.Image;
+import com.spd.exception.ImageException;
 import com.spd.service.ImageService;
 import com.spd.validator.FileValidator;
 import io.swagger.annotations.Api;
@@ -9,13 +10,13 @@ import io.swagger.annotations.ApiOperation;
 import net.sf.jmimemagic.Magic;
 import net.sf.jmimemagic.MagicMatch;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
 import java.io.IOException;
-
-import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 
 @RestController
 @RequestMapping("api/v1/images")
@@ -31,7 +32,8 @@ public class ImageController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "upload image", httpMethod = "POST")
-    public ImageBean uploadImage(@RequestParam(value = "image") MultipartFile imageFile, HttpServletResponse response) throws IOException {
+    @Consumes(MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ImageBean uploadImage(@RequestParam(value = "image") MultipartFile imageFile/*, HttpServletResponse response*/) throws Exception {
         String mimeType;
         FileValidator fileValidator = new FileValidator();
 
@@ -43,9 +45,9 @@ public class ImageController {
         }
 
         if ((!fileValidator.validate(mimeType, imageFile)) || (!fileValidator.validateImageWidthHeight(imageFile))) {
-            response.setStatus(SC_BAD_REQUEST);
-            //throw new ImageException();
-            return null;
+            //response.setStatus(SC_BAD_REQUEST);
+            throw new ImageException();
+            //return null;
         }
 
         Image image = imageService.saveImage(mimeType, imageFile.getBytes());
@@ -65,8 +67,4 @@ public class ImageController {
         response.getOutputStream().write(image.getData());
         response.getOutputStream().close();
     }
-       /*   if(!fileValidator.validateImageWidthHeight(imageFile)){
-            response.setStatus(SC_BAD_REQUEST);
-            return null;
-        }*/
 }
