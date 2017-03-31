@@ -2,6 +2,7 @@ package com.spd.controller;
 
 import com.spd.bean.AnnouncementBean;
 import com.spd.bean.AnnouncementIdentifiedBean;
+import com.spd.exception.AuthenticationUserException;
 import com.spd.service.AnnouncementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/announcements")
@@ -26,6 +28,8 @@ public class AnnouncementController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "get announcements list", httpMethod = "GET")
     public List<AnnouncementIdentifiedBean> getAnnouncements(Authentication authentication) {
+        Optional.ofNullable(authentication)
+                .orElseThrow(() -> new AuthenticationUserException("User not authentication"));
         return announcementService.getAnnouncementsByUserEmail(authentication.getName());
     }
 
