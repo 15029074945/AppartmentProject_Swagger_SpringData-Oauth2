@@ -17,10 +17,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String DEFAULT_MESSAGE = "(Global) ";
     private static final HttpStatus DEFAULT_HTTP_STATUS = HttpStatus.INTERNAL_SERVER_ERROR;
 
-    @ExceptionHandler(value = AuthenticationUserException.class)
+    /*@ExceptionHandler(value = AuthenticationUserException.class)
     public ResponseEntity<ErrorModelBean> authenticationUserException(Exception ex) {
         return new ResponseEntity<>(new ErrorModelBean(DEFAULT_MESSAGE + ex.getMessage()), DEFAULT_HTTP_STATUS);
-    }
+    }*/
 
     @ExceptionHandler(value = CheckFailedException.class)
     public ResponseEntity<ErrorModelBean> checkFailedException(Exception ex) {
@@ -50,14 +50,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = ValidationException.class)
     public ResponseEntity<ErrorModelBean> validationException(Exception ex) {
         return new ResponseEntity<>(new ErrorModelBean(DEFAULT_MESSAGE + ex.getMessage()), DEFAULT_HTTP_STATUS);
-    }
-
-
-    @ExceptionHandler(value = LoginAuthenticationProvider.AuthenticationExceptionImpl.class)
-    public ResponseEntity<ErrorModelBean> handleAuthentication(Exception ex, WebRequest request) {
-        ErrorModelBean errorModelBean = new ErrorModelBean(DEFAULT_MESSAGE + ex.getMessage());
-
-        return new ResponseEntity<>(errorModelBean, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = MessagingException.class)
