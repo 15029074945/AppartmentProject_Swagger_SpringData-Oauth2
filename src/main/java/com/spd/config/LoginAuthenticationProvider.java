@@ -1,6 +1,7 @@
 package com.spd.config;
 
 import com.spd.entity.User;
+import com.spd.exception.AuthenticationUserException;
 import com.spd.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -40,17 +41,17 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
             status = user.getStatus();
         }
         else {
-            throw new AuthenticationExceptionImpl("Error email");
+            throw new AuthenticationUserException("Error email");
         }
         if (!authenticationEmail.equals(userEmail)) {
-            throw new AuthenticationExceptionImpl("Error email");
+            throw new AuthenticationUserException("Error email");
         }
         else if (!authenticationPassword.equals(userPassword)) {
-            throw new AuthenticationExceptionImpl("Error password");
+            throw new AuthenticationUserException("Error password");
         }
         else if (!status) {
             userService.repeatSendEmail(user);
-            throw new AuthenticationExceptionImpl("Authorize your mail");
+            throw new AuthenticationUserException("Authorize your mail");
         }
         else {
             List<GrantedAuthority> grantedAuths = new ArrayList<>();
@@ -58,17 +59,6 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
                     authenticationEmail,
                     authenticationPassword,
                     grantedAuths);
-        }
-    }
-
-    public class AuthenticationExceptionImpl extends RuntimeException {
-
-        public AuthenticationExceptionImpl(String msg, Throwable t) {
-            super(msg, t);
-        }
-
-        public AuthenticationExceptionImpl(String msg) {
-            super(msg);
         }
     }
 
