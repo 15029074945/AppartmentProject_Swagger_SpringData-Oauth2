@@ -6,6 +6,7 @@ import com.spd.entity.Image;
 import com.spd.entity.User;
 import com.spd.entity.UserToken;
 import com.spd.exception.NoSuchUserException;
+import com.spd.exception.UserAuthenticationException;
 import com.spd.mapper.ObjectMapper;
 import com.spd.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,24 +19,32 @@ import java.util.Optional;
 public class UserService {
 
     private final ObjectMapper objectMapper;
-    private final UserTokenService userTokenService;
-    private final EmailService emailService;
     private final UserRepository userRepository;
     private final ImageService imageService;
 
     @Autowired
-    public UserService(ObjectMapper objectMapper, UserTokenService userTokenService, EmailService emailService, UserRepository userRepository, ImageService imageService) {
+    public UserService(ObjectMapper objectMapper, UserRepository userRepository, ImageService imageService) {
         this.objectMapper = objectMapper;
-        this.userTokenService = userTokenService;
-        this.emailService = emailService;
         this.userRepository = userRepository;
         this.imageService = imageService;
     }
 
     public User createUser(UserRegistrationBean userRegistrationBean) {
-        User user = objectMapper.map(userRegistrationBean, User.class);
-        user.setStatus(false);
-        return saveUser(user);
+        String email = userRegistrationBean.getEmail();
+        Optional<User> userOptional = userRepository.findOneByEmail(email);
+        if (userOptional.isPresent()) {
+            if (userOptional.get().getActive()) {
+                throw new UserAuthenticationException("User is created");
+            }
+            else {
+                throw new UserAuthenticationException("User is deleted");
+            }
+        }
+        else {
+            User user = objectMapper.map(userRegistrationBean, User.class);
+            user.setStatus(false);
+            return saveUser(user);
+        }
     }
 
     public User saveUser(User user) {
@@ -57,33 +66,14 @@ public class UserService {
         return userRepository.findOneByEmailAndActiveTrue(email);
     }
 
-    public void verification(String token) {
-        Optional<UserToken> userTokenOptional = userTokenService.getUserTokenByToken(token);
-        if (userTokenOptional.isPresent()) {
-            User user = userTokenOptional.get().getUser();
-            user.setStatus(true);
-            userRepository.save(user);
-            userTokenService.deleteToken(userTokenOptional.get());
-        }
-        else {
-            // TODO
-        }
-    }
-
-    public void updateUser(Optional<String> emailOptional, UserInformationBean userInformationBean) {
-        User newUser = emailOptional
-                .flatMap(userRepository::findOneByEmailAndActiveTrue)
-                .map(user -> updateUserWithUserRegistrationBean(user, userInformationBean))
-                .orElseGet(() -> objectMapper.map(userInformationBean, User.class));
+    public void updateUser(String email, UserInformationBean userInformationBean) {
+        User user = getByEmail(email);
+        User newUser = updateUserWithUserRegistrationBean(user, userInformationBean);
         saveUser(newUser);
     }
 
     public User getById(int id) {
         return userRepository.getOne(id);
-    }
-
-    public void updateUser(User user) {
-        userRepository.save(user);
     }
 
 
@@ -105,31 +95,4 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void registration(User user) throws MessagingException {
-        String token = userTokenService.createToken();
-        userTokenService.saveToken(user, token);
-
-        String link = emailService.createLink(token);
-        emailService.sendMail(user.getEmail(), link);
-    }
-
-    public void repeatSendEmail(User user) {
-        Optional<UserToken> userTokenOptional = userTokenService.getUserTokenByUser(user);
-        if (userTokenOptional.isPresent()) {
-            String token = userTokenOptional.get().getToken();
-            String link = emailService.createLink(token);
-            try {
-                emailService.sendMail(user.getEmail(), link);
-            } catch (MessagingException ignored) {
-                // TODO
-            }
-        }
-        else {
-            try {
-                registration(user);
-            } catch (MessagingException ignored) {
-                // TODO
-            }
-        }
-    }
 }
