@@ -2,6 +2,7 @@ package com.spd.config;
 
 import com.spd.entity.User;
 import com.spd.exception.AuthenticationUserException;
+import com.spd.service.RegistrationService;
 import com.spd.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -19,10 +20,12 @@ import java.util.Optional;
 public class LoginAuthenticationProvider implements AuthenticationProvider {
 
     private final UserService userService;
+    private final RegistrationService registrationService;
 
     @Autowired
-    public LoginAuthenticationProvider(UserService userService) {
+    public LoginAuthenticationProvider(UserService userService, RegistrationService registrationService) {
         this.userService = userService;
+        this.registrationService = registrationService;
     }
 
     @Override
@@ -50,7 +53,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
             throw new AuthenticationUserException("Error password");
         }
         else if (!status) {
-            userService.repeatSendEmail(user);
+            registrationService.repeatSendEmail(user);
             throw new AuthenticationUserException("Authorize your mail");
         }
         else {
