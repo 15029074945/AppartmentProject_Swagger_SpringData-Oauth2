@@ -22,6 +22,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ErrorModelBean(DEFAULT_MESSAGE + ex.getMessage()), DEFAULT_HTTP_STATUS);
     }*/
 
+    @ExceptionHandler(value = AlreadyHaveUserEmail.class)
+    public ResponseEntity<ErrorModelBean> alreadyHaveUserEmail(Exception ex) {
+        return new ResponseEntity<>(new ErrorModelBean(DEFAULT_MESSAGE + ex.getMessage()), DEFAULT_HTTP_STATUS);
+    }
+
+    @ExceptionHandler(value = AlreadyHaveUserTelephone.class)
+    public ResponseEntity<ErrorModelBean> alreadyHaveUserTelephone(Exception ex) {
+        return new ResponseEntity<>(new ErrorModelBean(DEFAULT_MESSAGE + ex.getMessage()), DEFAULT_HTTP_STATUS);
+    }
+
     @ExceptionHandler(value = CheckFailedException.class)
     public ResponseEntity<ErrorModelBean> checkFailedException(Exception ex) {
         return new ResponseEntity<>(new ErrorModelBean(DEFAULT_MESSAGE + ex.getMessage()), DEFAULT_HTTP_STATUS);
@@ -47,16 +57,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ErrorModelBean(DEFAULT_MESSAGE + ex.getMessage()), DEFAULT_HTTP_STATUS);
     }
 
+    @ExceptionHandler(value = NoSuchUserEmailException.class)
+    public ResponseEntity<ErrorModelBean> noSuchUserEmailException(Exception ex) {
+        return new ResponseEntity<>(new ErrorModelBean(DEFAULT_MESSAGE + ex.getMessage()), DEFAULT_HTTP_STATUS);
+    }
+
+    @ExceptionHandler(value = UserAuthenticationException.class)
+    public ResponseEntity<ErrorModelBean> userAuthenticationException(Exception ex) {
+        return new ResponseEntity<>(new ErrorModelBean(DEFAULT_MESSAGE + ex.getMessage()), DEFAULT_HTTP_STATUS);
+    }
+
     @ExceptionHandler(value = ValidationException.class)
     public ResponseEntity<ErrorModelBean> validationException(Exception ex) {
         return new ResponseEntity<>(new ErrorModelBean(DEFAULT_MESSAGE + ex.getMessage()), DEFAULT_HTTP_STATUS);
     }
 
-    @ExceptionHandler(value = MessagingException.class)
+    @ExceptionHandler(value = MessagingUserException.class)
     public ResponseEntity<ErrorModelBean> handleVerifyEmail(Exception ex) {
         ErrorModelBean errorModelBean = new ErrorModelBean(DEFAULT_MESSAGE + "Not send email" + ex.getMessage());
 
-        return new ResponseEntity<>(errorModelBean, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorModelBean, HttpStatus.OK);
     }
 
     @ExceptionHandler(value = ImageException.class)
