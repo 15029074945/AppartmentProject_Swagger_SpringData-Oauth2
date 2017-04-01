@@ -37,7 +37,6 @@ public class UserController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create update user", httpMethod = "POST")
     public ResponseEntity<String> createUser(Authentication authentication, @RequestBody UserRegistrationBean userRegistrationBean) {
-        checkService.checkAuthentication(authentication);
         checkService.checkUserTerm(userRegistrationBean);
         User user = userService.createUser(userRegistrationBean);
         registrationService.registration(user);
