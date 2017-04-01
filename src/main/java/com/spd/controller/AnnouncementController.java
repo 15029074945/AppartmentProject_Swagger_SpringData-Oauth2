@@ -2,8 +2,8 @@ package com.spd.controller;
 
 import com.spd.bean.AnnouncementBean;
 import com.spd.bean.AnnouncementIdentifiedBean;
-import com.spd.exception.AuthenticationUserException;
 import com.spd.service.AnnouncementService;
+import com.spd.service.CheckService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/announcements")
@@ -19,23 +18,23 @@ import java.util.Optional;
 public class AnnouncementController {
 
     private final AnnouncementService announcementService;
+    private final CheckService checkService;
 
     @Autowired
-    public AnnouncementController(AnnouncementService announcementService) {
+    public AnnouncementController(AnnouncementService announcementService, CheckService checkService) {
         this.announcementService = announcementService;
+        this.checkService = checkService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "get announcements list", httpMethod = "GET")
     public List<AnnouncementIdentifiedBean> getAnnouncements(Authentication authentication) {
-        Optional.ofNullable(authentication)
-                .orElseThrow(() -> new AuthenticationUserException("User not authentication"));
         return announcementService.getAnnouncementsByUserEmail(authentication.getName());
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "get announcement", httpMethod = "GET")
-    public AnnouncementIdentifiedBean getAnnouncement(Authentication authentication, @PathVariable("id") int id) {
+    public AnnouncementIdentifiedBean getAnnouncement(Authentication authentication, @PathVariable("id") Integer id) {
         return announcementService.getAnnouncementById(authentication.getName(), id);
     }
 
@@ -53,7 +52,8 @@ public class AnnouncementController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete announcement", httpMethod = "DELETE")
-    public void delete(Authentication authentication, @PathVariable("id") int id) {
+    public void delete(Authentication authentication, @PathVariable("id") Integer id) {
+        checkService.checkAuthentication(authentication);
         announcementService.deleteAnnouncement(authentication.getName(), id);
     }
 
