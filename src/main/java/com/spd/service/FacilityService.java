@@ -3,6 +3,7 @@ package com.spd.service;
 import com.spd.bean.FacilityBean;
 import com.spd.entity.Facility;
 import com.spd.entity.User;
+import com.spd.mapper.ObjectMapper;
 import com.spd.repository.FacilityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,33 +15,21 @@ import java.util.List;
 public class FacilityService {
 
     private final FacilityRepository facilityRepository;
-    private final UserService userService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public FacilityService(FacilityRepository facilityRepository, UserService userService) {
+    public FacilityService(FacilityRepository facilityRepository, ObjectMapper objectMapper) {
         this.facilityRepository = facilityRepository;
-        this.userService = userService;
+        this.objectMapper = objectMapper;
     }
 
     public Facility getFacilityByTitle(String title) {
         return facilityRepository.findOneByTitle(title);
     }
 
-    public List<FacilityBean> getAllTitle(String email) {
-        User ignore = userService.getByEmail(email);
-
+    public List<FacilityBean> getAllTitleFacilities() {
         List<Facility> facilities = facilityRepository.findAll();
-        List<FacilityBean> titles = new ArrayList<>();
-        facilities.forEach(f -> {
-            String title = f.getTitle();
-            FacilityBean facilityBean = new FacilityBean();
-            facilityBean.setTitle(title);
-            titles.add(facilityBean);
-        });
-        return titles;
+        return objectMapper.mapAsList(facilities, FacilityBean.class);
     }
 
-    public List<Facility> getAll() {
-        return facilityRepository.findAll();
-    }
 }
