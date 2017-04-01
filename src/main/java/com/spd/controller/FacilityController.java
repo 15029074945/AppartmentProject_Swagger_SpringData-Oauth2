@@ -4,7 +4,7 @@ import com.spd.bean.FacilityBean;
 import com.spd.service.FacilityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,14 +18,15 @@ public class FacilityController {
 
     private final FacilityService facilityService;
 
+    @Autowired
     public FacilityController(FacilityService facilityService) {
         this.facilityService = facilityService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "get announcement facilities", httpMethod = "GET")
-    public List<FacilityBean> getFacilities(Authentication authentication) {
-        return facilityService.getAllTitle(authentication.getName());
+    public List<FacilityBean> getFacilities() {
+        return facilityService.getAllTitleFacilities();
     }
 
 }
