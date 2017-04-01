@@ -41,9 +41,15 @@ public class PriceController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.DELETE)
-    @ApiOperation(value = "delete price", httpMethod = "DELETE")
-    public void deletePrice(Authentication authentication, @PathVariable("idAnnouncement") int idAnnouncement) {
+    @ApiOperation(value = "delete prices", httpMethod = "DELETE")
+    public void deletePrices(Authentication authentication, @PathVariable("idAnnouncement") int idAnnouncement) {
         priceService.deletePrices(authentication.getName(), idAnnouncement);
+    }
+
+    @RequestMapping(value = "/{type}", method = RequestMethod.DELETE)
+    @ApiOperation(value = "delete price", httpMethod = "DELETE")
+    public void deletePrice(Authentication authentication, @PathVariable("idAnnouncement") int idAnnouncement, @PathVariable("type") String type) {
+        priceService.deletePrice(authentication.getName(), idAnnouncement, type);
     }
 
 }
