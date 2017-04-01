@@ -24,8 +24,8 @@ public class UserTelephoneController {
 
     @RequestMapping(value = "/{telephone}", method = RequestMethod.POST)
     @ApiOperation(value = "add extra telephone", httpMethod = "POST")
-    public UserTelephoneBean addExtraTelephone(Authentication authentication, @PathVariable("telephone") String telephone) {
-        return userTelephoneService.saveUserTelephone(authentication.getName(), telephone);
+    public UserTelephoneBean addExtraTelephone(Authentication authentication, @RequestBody UserTelephoneBean userTelephoneBean) {
+        return userTelephoneService.saveUserTelephone(authentication.getName(), userTelephoneBean.getTelephone());
     }
 
     @RequestMapping(value = "", method = RequestMethod.PUT)
@@ -42,7 +42,7 @@ public class UserTelephoneController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "get list extra telephones", httpMethod = "GET")
-    public List<UserTelephoneBean> getUserExtraEmails(Authentication authentication) {
+    public List<UserTelephoneBean> getExtraEmails(Authentication authentication) {
         return userTelephoneService.getListByEmail(authentication.getName());
     }
 
