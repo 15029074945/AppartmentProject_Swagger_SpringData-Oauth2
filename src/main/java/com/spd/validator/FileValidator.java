@@ -1,5 +1,6 @@
 package com.spd.validator;
 
+import com.spd.exception.ImageException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -8,7 +9,6 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class FileValidator {
-
 
     private static final int MAX_ALLOWED_FILE_SIZE = 2 * 1024 * 1024; // 2 мб
     private static final int WIDTH_BIG_FILE = 2048;
@@ -20,26 +20,27 @@ public class FileValidator {
     private final String[] allowedMimeTypes = {"image/jpeg", "image/png", "image/gif"};
 
 
-    public boolean validate(String mimeType, MultipartFile imageFile) {
+    public void validate(String mimeType, MultipartFile imageFile) throws IOException, ImageException
+    {
+        if (imageFile.getSize() > MAX_ALLOWED_FILE_SIZE) {
+            throw new ImageException();
+        }
 
-        Boolean isSizeValid = imageFile.getSize() < MAX_ALLOWED_FILE_SIZE;
+        if (!Arrays.asList(allowedMimeTypes).contains(mimeType)) {
+            throw new ImageException();
+        }
 
-        Boolean isMimeTypeValid = Arrays.asList(allowedMimeTypes).contains(mimeType);
-
-        return isSizeValid && isMimeTypeValid;
+        validateImageWidthHeight(imageFile);
     }
 
-
-    public boolean validateImageWidthHeight(MultipartFile imageFile) {
+    private void validateImageWidthHeight(MultipartFile imageFile) throws IOException, ImageException {
         BufferedImage bimg = null;
-        try {
-            bimg = ImageIO.read(imageFile.getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        bimg = ImageIO.read(imageFile.getInputStream());
         int width = bimg.getWidth();
         int height = bimg.getHeight();
 
-        return !((width < WIDTH_SMOLL_FILE || height < HEIGHT_SMOLL_FILE) || (width > WIDTH_BIG_FILE || height > HEIGHT_BIG_FILE));
+        if ((width < WIDTH_SMOLL_FILE || height < HEIGHT_SMOLL_FILE) || (width > WIDTH_BIG_FILE || height > HEIGHT_BIG_FILE)) {
+            throw new ImageException();
+        }
     }
 }
