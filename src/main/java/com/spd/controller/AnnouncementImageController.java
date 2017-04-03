@@ -6,6 +6,7 @@ import com.spd.service.AnnouncementService;
 import com.spd.service.ImageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,7 +17,7 @@ public class AnnouncementImageController {
     private final ImageService imageService;
     private final AnnouncementService announcementService;
     private final AnnouncementImageService announcementImageService;
-
+    @Autowired
     public AnnouncementImageController(ImageService imageService, AnnouncementService announcementService, AnnouncementImageService announcementImageService) {
         this.imageService = imageService;
         this.announcementService = announcementService;
@@ -25,14 +26,14 @@ public class AnnouncementImageController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create announcement image ", httpMethod = "POST")
-    public void saveAnnouncementImage(@RequestBody AnnouncementImageBean announcementImageBean, @PathVariable int id){
-            announcementImageService.saveAnnoucementImage(imageService.getImage(announcementImageBean.getId()),
-                    announcementImageBean.getTitle(),id);
+    public void saveAnnouncementImage(@RequestBody AnnouncementImageBean announcementImageBean, @PathVariable Integer id){
+        announcementImageService.saveAnnoucementImage(imageService.getImage(announcementImageBean.getId()),
+                announcementImageBean.getTitle(),id);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete announcement picture", httpMethod = "DELETE")
-    public void delete(@RequestBody AnnouncementImageBean announcementImageBean) {
-             announcementImageService.deleteAnnouncementImage(announcementImageBean.getId());
+    public void delete(@RequestBody AnnouncementImageBean announcementImageBean)  {
+        announcementImageService.deleteAnnouncementImage(announcementImageBean.getId());
     }
 }
