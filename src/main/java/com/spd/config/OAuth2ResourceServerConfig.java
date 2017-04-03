@@ -46,7 +46,7 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                         "/api/v1/messages",
                         "/api/v1/facilities",
                         "/api/v1/conversations",
-                        "/api/v1/images",
+                        "/api/v1/images/*",
                         "/api/v1/announcements",
                         "/api/v1/announcements/**",
                         "/api/v1/users")

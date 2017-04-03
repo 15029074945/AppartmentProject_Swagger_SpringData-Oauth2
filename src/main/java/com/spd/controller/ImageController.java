@@ -21,14 +21,14 @@ public class ImageController {
     private final ImageService imageService;
 
     @Autowired
-    ImageController(ImageService imageService) {
+    public ImageController(ImageService imageService) {
         this.imageService = imageService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "upload image", httpMethod = "POST")
-    public ImageBean uploadImage(@RequestParam(value = "image") MultipartFile imageFile) throws Exception {
-        Image image = imageService.saveImage(imageFile);
+    public ImageBean uploadImage(@RequestParam(value = "file") MultipartFile fileImage) throws Exception {
+        Image image = imageService.saveImage(fileImage);
         ImageBean imageBean = new ImageBean();
         imageBean.setId(image.getId());
         imageBean.setUrl("/api/v1/images/" + Integer.toString(image.getId()));
