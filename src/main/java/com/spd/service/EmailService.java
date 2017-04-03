@@ -15,8 +15,8 @@ import java.util.Properties;
 @Service
 public class EmailService {
 
-    @Value("mail.front.host")
-    private String frontName;
+    @Value("#{environment['mail.front.host']}")
+    private String mailFrontHost;
 
     private static final String VERIFY_EMAIL_TOKEN = "/verify-email?token=";
     private static final String TO_CONFIRM_THE_EMAIL_CLICK_THE_LINK = "To confirm the email, click the link: ";
@@ -45,6 +45,6 @@ public class EmailService {
     }
 
     public String createLink(String token) {
-        return TO_CONFIRM_THE_EMAIL_CLICK_THE_LINK + frontName + VERIFY_EMAIL_TOKEN + token;
+        return TO_CONFIRM_THE_EMAIL_CLICK_THE_LINK + mailFrontHost + VERIFY_EMAIL_TOKEN + token;
     }
 }
