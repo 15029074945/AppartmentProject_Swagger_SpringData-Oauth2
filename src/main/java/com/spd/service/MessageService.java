@@ -1,12 +1,12 @@
 package com.spd.service;
 
 import com.spd.bean.MessageBean;
-import com.spd.entity.*;
+import com.spd.entity.Announcement;
+import com.spd.entity.Conversation;
+import com.spd.entity.User;
 import com.spd.repository.MessageRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,7 +34,7 @@ public class MessageService {
             // TODO
         }
         else {
-            Conversation conv = new Conversation();
+            /*Conversation conv = new Conversation();
             conv.setAnnouncement(announcement);
             Conversation conversationNew = conversationService.saveConversation(conv);
             Attender attender = new Attender();
@@ -45,7 +45,7 @@ public class MessageService {
             Message message = new Message();
             message.setText(messageBean.getText());
             message.setReceived(false);
-            List<Message> messages = new ArrayList<>();
+            List<Message> messages = new ArrayList<>();*/
             //messages.add()
             //conversation.setMessages();
             // TODO
