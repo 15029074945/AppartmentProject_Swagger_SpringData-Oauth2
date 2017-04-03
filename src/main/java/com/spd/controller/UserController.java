@@ -46,7 +46,6 @@ public class UserController {
     @RequestMapping(value = "/pass", method = RequestMethod.POST)
     @ApiOperation(value = "change password", httpMethod = "POST")
     public void changePassword(Authentication authentication, @RequestBody String password) {
-        checkService.checkAuthentication(authentication);
         userService.changePassword(authentication.getName(), password);
     }
 
@@ -59,14 +58,12 @@ public class UserController {
     @RequestMapping(value = "", method = RequestMethod.PUT)
     @ApiOperation(value = "create update user", httpMethod = "PUT")
     public void updateUser(Authentication authentication, @RequestBody UserInformationBean userInformationBean) {
-        checkService.checkAuthentication(authentication);
         userService.updateUser(authentication.getName(), userInformationBean);
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "get user", httpMethod = "GET")
     public UserInformationBean getUser(Authentication authentication) {
-        checkService.checkAuthentication(authentication);
         User user = userService.getByEmail(authentication.getName());
         return objectMapper.map(user, UserInformationBean.class);
     }
@@ -74,14 +71,12 @@ public class UserController {
     @RequestMapping(value = "", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete user", httpMethod = "DELETE")
     public void deleteUser(Authentication authentication) {
-        checkService.checkAuthentication(authentication);
         userService.deleteUser(authentication.getName());
     }
 
     @RequestMapping(value = "/{id}/image", method = RequestMethod.PUT)
     @ApiOperation(value = "set image", httpMethod = "PUT")
     public void setUserImage(Authentication authentication , @RequestBody ImageBean imageBean) {
-        checkService.checkAuthentication(authentication);
         userService.setImage(authentication.getName(), imageBean.getId());
     }
 

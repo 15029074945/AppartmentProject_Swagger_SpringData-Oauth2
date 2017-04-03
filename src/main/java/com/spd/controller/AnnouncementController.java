@@ -18,12 +18,10 @@ import java.util.List;
 public class AnnouncementController {
 
     private final AnnouncementService announcementService;
-    private final CheckService checkService;
 
     @Autowired
-    public AnnouncementController(AnnouncementService announcementService, CheckService checkService) {
+    public AnnouncementController(AnnouncementService announcementService) {
         this.announcementService = announcementService;
-        this.checkService = checkService;
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
@@ -53,7 +51,6 @@ public class AnnouncementController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ApiOperation(value = "delete announcement", httpMethod = "DELETE")
     public void delete(Authentication authentication, @PathVariable("id") Integer id) {
-        checkService.checkAuthentication(authentication);
         announcementService.deleteAnnouncement(authentication.getName(), id);
     }
 
