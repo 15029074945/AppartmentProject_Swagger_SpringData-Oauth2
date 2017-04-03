@@ -74,10 +74,16 @@ public class UserController {
         userService.deleteUser(authentication.getName());
     }
 
-    @RequestMapping(value = "/{id}/image", method = RequestMethod.PUT)
+    @RequestMapping(value = "/image", method = RequestMethod.PUT)
     @ApiOperation(value = "set image", httpMethod = "PUT")
     public void setUserImage(Authentication authentication , @RequestBody ImageBean imageBean) {
         userService.setImage(authentication.getName(), imageBean.getId());
     }
 
+    @RequestMapping(value = "/image", method = RequestMethod.GET)
+    @ApiOperation(value = "get image", httpMethod = "GET")
+    public String getUserImage(Authentication authentication ) {
+        checkService.checkAuthentication(authentication);
+       return userService.getImageUrl(authentication.getName());
+    }
 }

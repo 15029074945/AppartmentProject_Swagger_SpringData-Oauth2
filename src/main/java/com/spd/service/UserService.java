@@ -4,7 +4,6 @@ import com.spd.bean.UserInformationBean;
 import com.spd.bean.UserRegistrationBean;
 import com.spd.entity.Image;
 import com.spd.entity.User;
-import com.spd.entity.UserToken;
 import com.spd.exception.NoSuchUserException;
 import com.spd.exception.UserAuthenticationException;
 import com.spd.mapper.ObjectMapper;
@@ -12,7 +11,6 @@ import com.spd.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
 import java.util.Optional;
 
 @Service
@@ -35,12 +33,10 @@ public class UserService {
         if (userOptional.isPresent()) {
             if (userOptional.get().getActive()) {
                 throw new UserAuthenticationException("User is created");
-            }
-            else {
+            } else {
                 throw new UserAuthenticationException("User is deleted");
             }
-        }
-        else {
+        } else {
             User user = objectMapper.map(userRegistrationBean, User.class);
             user.setStatus(false);
             return saveUser(user);
@@ -95,4 +91,13 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public String getImageUrl(String email) {
+        User user = getByEmail(email);
+        Image image = user.getImage();
+        if (image == null) {
+            return "";
+        } else {
+            return "api/v1/images/" + image.getId();
+        }
+    }
 }
