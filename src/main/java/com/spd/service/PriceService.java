@@ -36,6 +36,15 @@ public class PriceService {
         return objectMapper.mapAsList(prices, PriceBean.class);
     }
 
+    public List<PriceBean> getPricesBeans(Announcement announcement) {
+        List<Price> prices = getUserPrices(announcement);
+        return objectMapper.mapAsList(prices, PriceBean.class);
+    }
+
+    private List<Price> getUserPrices(Announcement announcement) {
+        return priceRepository.findByAnnouncementIdAndActiveTrue(announcement.getId());
+    }
+
     public void savePrices(String email, PriceBean priceBeans, int idAnnouncement) {
         User user = userService.getByEmail(email);
         Announcement announcement = announcementService.getByIdAndUserId(idAnnouncement, user.getId());

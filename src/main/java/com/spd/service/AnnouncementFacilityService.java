@@ -35,7 +35,10 @@ public class AnnouncementFacilityService {
     public List<FacilityBean> getFacilities(String email, int idAnnouncement) {
         User user = userService.getByEmail(email);
         Announcement announcement = announcementService.getByIdAndUserId(idAnnouncement, user.getId());
+        return getFacilityBeans(announcement);
+    }
 
+    public List<FacilityBean> getFacilityBeans(Announcement announcement) {
         List<AnnouncementFacility> announcementFacilities =
                 announcementFacilityRepository.findByAnnouncementId(announcement.getId());
 
