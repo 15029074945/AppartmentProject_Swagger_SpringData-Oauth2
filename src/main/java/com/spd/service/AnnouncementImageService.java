@@ -2,7 +2,9 @@ package com.spd.service;
 
 import com.spd.entity.AnnouncementImage;
 import com.spd.entity.Image;
+import com.spd.mapper.ObjectMapper;
 import com.spd.repository.AnnouncementImageRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,10 +13,13 @@ import java.util.Optional;
 public class AnnouncementImageService {
     private final AnnouncementImageRepository announcementImageRepository;
     private final AnnouncementService announcementService;
+    private final ObjectMapper objectMapper;
 
-    public AnnouncementImageService(AnnouncementImageRepository announcementImageRepository, AnnouncementService announcementService) {
+    @Autowired
+    public AnnouncementImageService(AnnouncementImageRepository announcementImageRepository, AnnouncementService announcementService, ObjectMapper objectMapper) {
         this.announcementImageRepository = announcementImageRepository;
         this.announcementService = announcementService;
+        this.objectMapper = objectMapper;
     }
     public void saveAnnoucementImage(Image image, String title, Integer id) {
         AnnouncementImage announcementImage = new AnnouncementImage();
@@ -25,14 +30,14 @@ public class AnnouncementImageService {
         announcementImageRepository.save(announcementImage);
     }
 
-    public void deleteAnnouncementImage(int id) {
+    public void deleteAnnouncementImage(int id)  {
 
         Optional<AnnouncementImage> announcementImage = Optional.ofNullable(announcementImageRepository.getOne(id));
 
         if (announcementImage.isPresent()) {
             announcementImageRepository.delete(id);
         } else {
-            //TODO
+            //throw new AnnouncementImageException();
         }
     }
 }
