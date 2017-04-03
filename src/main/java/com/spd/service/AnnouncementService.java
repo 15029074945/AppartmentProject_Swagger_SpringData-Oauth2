@@ -32,7 +32,7 @@ public class AnnouncementService {
         return objectMapper.mapAsList(announcements, AnnouncementIdentifiedBean.class);
     }
 
-    public AnnouncementIdentifiedBean getAnnouncementById(String email, int id) {
+    public AnnouncementIdentifiedBean getAnnouncementByUserAndId(String email, int id) {
         User user = userService.getByEmail(email);
 
         Announcement announcement = getByIdAndUserId(id, user.getId());

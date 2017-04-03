@@ -3,7 +3,6 @@ package com.spd.controller;
 import com.spd.bean.AnnouncementBean;
 import com.spd.bean.AnnouncementIdentifiedBean;
 import com.spd.service.AnnouncementService;
-import com.spd.service.CheckService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ public class AnnouncementController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "get announcement", httpMethod = "GET")
     public AnnouncementIdentifiedBean getAnnouncement(Authentication authentication, @PathVariable("id") Integer id) {
-        return announcementService.getAnnouncementById(authentication.getName(), id);
+        return announcementService.getAnnouncementByUserAndId(authentication.getName(), id);
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)

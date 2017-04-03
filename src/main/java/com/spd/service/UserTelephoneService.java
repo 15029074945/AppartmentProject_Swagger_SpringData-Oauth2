@@ -30,7 +30,7 @@ public class UserTelephoneService {
     public UserTelephoneBean saveUserTelephone(String userEmail, String extraTelephone) {
         User user = userService.getByEmail(userEmail);
         int userId = user.getId();
-        Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findByUserIdAndTelephone(userId, extraTelephone);
+        Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findOneByUserIdAndTelephone(userId, extraTelephone);
         if (userEmailOptional.isPresent()) {
             throw new AlreadyHaveUserTelephone("Already have this extra telephone");
         }
@@ -48,8 +48,8 @@ public class UserTelephoneService {
     }
 
     public void deleteUserTelephone(String email, int id) {
-        User ignore = userService.getByEmail(email);
-        Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findOneById(id);
+        User user = userService.getByEmail(email);
+        Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findOneByUserIdAndId(user.getId(), id);
         userEmailOptional.map(userEmail -> {
             userTelephoneRepository.delete(id);
             return Optional.of(userEmail);
@@ -64,8 +64,8 @@ public class UserTelephoneService {
     }
 
     public void updateUserTelephone(String email, UserTelephoneBean userTelephoneBean) {
-        User ignore = userService.getByEmail(email);
-        Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findOneById(userTelephoneBean.getId());
+        User user = userService.getByEmail(email);
+        Optional<UserTelephone> userEmailOptional = userTelephoneRepository.findOneByUserIdAndId(user.getId(), userTelephoneBean.getId());
         userEmailOptional.flatMap(userEmail -> {
             userEmail.setTelephone(userTelephoneBean.getTelephone());
             userTelephoneRepository.save(userEmail);

@@ -32,7 +32,7 @@ public class AnnouncementFacilityService {
         this.facilityService = facilityService1;
     }
 
-    public List<FacilityBean> getFacilities(String email, int idAnnouncement) {
+    public List<FacilityBean> getFacilitiesByUserAndId(String email, int idAnnouncement) {
         User user = userService.getByEmail(email);
         Announcement announcement = announcementService.getByIdAndUserId(idAnnouncement, user.getId());
         return getFacilityBeans(announcement);

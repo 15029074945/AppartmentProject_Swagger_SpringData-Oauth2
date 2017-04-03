@@ -10,7 +10,6 @@ import com.spd.repository.UserEmailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +31,7 @@ public class UserEmailService {
     public UserEmailBean saveUserEmail(String email, String extraEmail) {
         User user = userService.getByEmail(email);
 
-        Optional<UserEmail> userEmailOptional = userEmailRepository.findByUserIdAndEmail(user.getId(), extraEmail);
+        Optional<UserEmail> userEmailOptional = userEmailRepository.findOneByUserIdAndEmail(user.getId(), extraEmail);
         if (userEmailOptional.isPresent()) {
             throw new AlreadyHaveUserEmail("Already have this extra email");
         }
@@ -50,8 +49,8 @@ public class UserEmailService {
     }
 
     public void deleteUserEmail(String email, int id) {
-        User ignore = userService.getByEmail(email);
-        Optional<UserEmail> userEmailOptional = userEmailRepository.findOneById(id);
+        User user = userService.getByEmail(email);
+        Optional<UserEmail> userEmailOptional = userEmailRepository.findOneByUserIdAndId(user.getId(), id);
         userEmailOptional.map(userEmail -> {
             userEmailRepository.delete(id);
             return Optional.of(userEmail);
@@ -66,8 +65,8 @@ public class UserEmailService {
     }
 
     public void updateUserEmail(String email, UserEmailBean userEmailBean) {
-        User ignore = userService.getByEmail(email);
-        Optional<UserEmail> userEmailOptional = userEmailRepository.findOneById(userEmailBean.getId());
+        User user = userService.getByEmail(email);
+        Optional<UserEmail> userEmailOptional = userEmailRepository.findOneByUserIdAndId(user.getId(), userEmailBean.getId());
         userEmailOptional.flatMap(userEmail -> {
             userEmail.setEmail(userEmailBean.getEmail());
             userEmailRepository.save(userEmail);

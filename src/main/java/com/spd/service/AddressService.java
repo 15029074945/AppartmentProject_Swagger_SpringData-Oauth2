@@ -31,7 +31,7 @@ public class AddressService {
         this.objectMapper = objectMapper;
     }
 
-    public AddressBean getAddressByAnnouncementId(String email, int idAnnouncement) {
+    public AddressBean getAddressByUserAndAnnouncement(String email, int idAnnouncement) {
         User user = userService.getByEmail(email);
 
         Announcement announcement = announcementService.getByIdAndUserId(idAnnouncement, user.getId());

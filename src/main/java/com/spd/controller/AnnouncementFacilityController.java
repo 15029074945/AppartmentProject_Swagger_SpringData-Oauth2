@@ -25,7 +25,7 @@ public class AnnouncementFacilityController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "get announcement facilities", httpMethod = "GET")
     public List<FacilityBean> getFacilities(Authentication authentication, @PathVariable("idAnnouncement") int idAnnouncement) {
-        return announcementFacilityService.getFacilities(authentication.getName(), idAnnouncement);
+        return announcementFacilityService.getFacilitiesByUserAndId(authentication.getName(), idAnnouncement);
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)

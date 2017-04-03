@@ -23,7 +23,7 @@ public class AddressController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ApiOperation(value = "", httpMethod = "GET")
     public AddressBean getAddress(Authentication authentication, @PathVariable("idAnnouncement") int idAnnouncement) {
-        return addressService.getAddressByAnnouncementId(authentication.getName(), idAnnouncement);
+        return addressService.getAddressByUserAndAnnouncement(authentication.getName(), idAnnouncement);
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)

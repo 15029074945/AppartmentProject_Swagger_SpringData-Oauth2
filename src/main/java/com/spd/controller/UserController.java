@@ -4,6 +4,8 @@ import com.spd.bean.ImageBean;
 import com.spd.bean.UserInformationBean;
 import com.spd.bean.UserRegistrationBean;
 import com.spd.entity.User;
+import com.spd.exception.AuthenticationUserException;
+import com.spd.exception.UserAuthenticationException;
 import com.spd.mapper.ObjectMapper;
 import com.spd.service.CheckService;
 import com.spd.service.RegistrationService;
@@ -15,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -37,6 +41,8 @@ public class UserController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create update user", httpMethod = "POST")
     public ResponseEntity<String> createUser(Authentication authentication, @RequestBody UserRegistrationBean userRegistrationBean) {
+        Optional.ofNullable(authentication)
+                .ifPresent(auth -> {throw new AuthenticationUserException("You can not create user!");});
         checkService.checkUserTerm(userRegistrationBean);
         User user = userService.createUser(userRegistrationBean);
         registrationService.registration(user);
