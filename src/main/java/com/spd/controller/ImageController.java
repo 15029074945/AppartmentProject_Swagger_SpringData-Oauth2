@@ -2,25 +2,20 @@ package com.spd.controller;
 
 import com.spd.bean.ImageBean;
 import com.spd.entity.Image;
-import com.spd.exception.ImageException;
 import com.spd.service.ImageService;
-import com.spd.validator.FileValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.sf.jmimemagic.Magic;
-import net.sf.jmimemagic.MagicMatch;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
 import java.io.IOException;
 
 @RestController
 @RequestMapping("api/v1/images")
 @Api(value = "creating  and viewing images")
+
 public class ImageController {
 
     private final ImageService imageService;
@@ -32,25 +27,8 @@ public class ImageController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "upload image", httpMethod = "POST")
-    @Consumes(MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ImageBean uploadImage(@RequestParam(value = "image") MultipartFile imageFile/*, HttpServletResponse response*/) throws Exception {
-        String mimeType;
-        FileValidator fileValidator = new FileValidator();
-
-        try {
-            MagicMatch match = Magic.getMagicMatch(imageFile.getBytes());
-            mimeType = match.getMimeType();
-        } catch (Exception e) {
-            mimeType = "";
-        }
-
-        if ((!fileValidator.validate(mimeType, imageFile)) || (!fileValidator.validateImageWidthHeight(imageFile))) {
-            //response.setStatus(SC_BAD_REQUEST);
-            throw new ImageException();
-            //return null;
-        }
-
-        Image image = imageService.saveImage(mimeType, imageFile.getBytes());
+    public ImageBean uploadImage(@RequestParam(value = "image") MultipartFile imageFile) throws Exception {
+        Image image = imageService.saveImage(imageFile);
         ImageBean imageBean = new ImageBean();
         imageBean.setId(image.getId());
         imageBean.setUrl("/api/v1/images/" + Integer.toString(image.getId()));
