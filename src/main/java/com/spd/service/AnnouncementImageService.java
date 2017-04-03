@@ -2,6 +2,7 @@ package com.spd.service;
 
 import com.spd.entity.AnnouncementImage;
 import com.spd.entity.Image;
+import com.spd.exception.AnnouncementImageException;
 import com.spd.mapper.ObjectMapper;
 import com.spd.repository.AnnouncementImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +33,13 @@ public class AnnouncementImageService {
 
     public void deleteAnnouncementImage(int id)  {
 
-        Optional<AnnouncementImage> announcementImage = Optional.ofNullable(announcementImageRepository.getOne(id));
+        Optional<AnnouncementImage> announcementImageOptional = Optional.ofNullable(announcementImageRepository.getOne(id));
 
-        if (announcementImage.isPresent()) {
-            announcementImageRepository.delete(id);
-        } else {
-            //throw new AnnouncementImageException();
-        }
+        announcementImageOptional
+                .map(announcementImage -> {
+                    announcementImageRepository.delete(id);
+                    return announcementImage;
+                })
+                .orElseThrow(AnnouncementImageException::new);
     }
 }
