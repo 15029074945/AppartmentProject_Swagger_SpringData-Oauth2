@@ -33,10 +33,12 @@ public class UserService {
         if (userOptional.isPresent()) {
             if (userOptional.get().getActive()) {
                 throw new UserAuthenticationException("User is created");
-            } else {
+            }
+            else {
                 throw new UserAuthenticationException("User is deleted");
             }
-        } else {
+        }
+        else {
             User user = objectMapper.map(userRegistrationBean, User.class);
             user.setStatus(false);
             return saveUser(user);

@@ -83,7 +83,6 @@ public class UserController {
     @RequestMapping(value = "/image", method = RequestMethod.GET)
     @ApiOperation(value = "get image", httpMethod = "GET")
     public String getUserImage(Authentication authentication ) {
-        checkService.checkAuthentication(authentication);
        return userService.getImageUrl(authentication.getName());
     }
 }
