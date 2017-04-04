@@ -1,6 +1,7 @@
 package com.spd.controller;
 
 import com.spd.bean.AnnouncementImageBean;
+import com.spd.entity.AnnouncementImage;
 import com.spd.service.AnnouncementImageService;
 import com.spd.service.AnnouncementService;
 import com.spd.service.ImageService;
@@ -8,6 +9,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/announcements/{id}/images")
@@ -27,7 +30,7 @@ public class AnnouncementImageController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "create announcement image ", httpMethod = "POST")
     public void saveAnnouncementImage(@RequestBody AnnouncementImageBean announcementImageBean, @PathVariable Integer id){
-        announcementImageService.saveAnnoucementImage(imageService.getImage(announcementImageBean.getId()),
+        announcementImageService.saveAnnouncementImage(imageService.getImage(announcementImageBean.getId()),
                 announcementImageBean.getTitle(),id);
     }
 
@@ -35,5 +38,11 @@ public class AnnouncementImageController {
     @ApiOperation(value = "delete announcement picture", httpMethod = "DELETE")
     public void delete(@RequestBody AnnouncementImageBean announcementImageBean)  {
         announcementImageService.deleteAnnouncementImage(announcementImageBean.getId());
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    @ApiOperation(value = "get announcement pictures", httpMethod = "GET")
+    public List<AnnouncementImage> getAnnouncementImages(@PathVariable Integer id) {
+       return announcementImageService.getAnnouncementImages(id);
     }
 }
